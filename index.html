@@ -7,7 +7,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Trust Manager">
 <title>Trust Manager</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,-apple-system,sans-serif;background:#f7f5f2;color:#1e293b;min-height:100vh;-webkit-text-size-adjust:100%}
@@ -141,12 +140,9 @@ var syncStatus='idle'; // idle | syncing | saved | error | offline
 var authStep='form';   // form | sent
 var authEmail='';
 
-// Init Supabase client
+// Supabase client — initialised in startApp() after dynamic script load
 var sb=null;
 var sbConfigured=(SUPABASE_URL.indexOf('YOUR-PROJECT-ID')===-1&&SUPABASE_URL.indexOf('YOUR-')===-1);
-if(sbConfigured){
-  try{sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);}catch(e){console.error('Supabase init failed:',e);sbConfigured=false;}
-}
 
 // ============================================================
 // UTILITY FUNCTIONS
@@ -400,23 +396,7 @@ window.logout=async function(){
   R();
 };
 
-// ============================================================
-// AUTH STATE LISTENER
-// ============================================================
-if(sb){
-  sb.auth.onAuthStateChange(function(event,session){
-    if(event==='SIGNED_IN'&&session&&!currentUser){
-      currentUser=session.user;
-      authStep='form';
-      loadFromCloud();
-    }
-    if(event==='SIGNED_OUT'){
-      currentUser=null;
-      S={trusts:[],beneficiaries:[],trustees:[],distributions:[],decisions:[],income:[],expenses:[],gains:[]};
-      AT=null;R();
-    }
-  });
-}
+// Auth state listener is wired in startApp() after Supabase loads
 
 // ============================================================
 // EVENT HANDLERS
@@ -802,7 +782,63 @@ async function init(){
   R();
 }
 
-init();
+// ============================================================
+// STARTUP — load Supabase dynamically then init
+// This pattern works on GitHub Pages, Netlify, and local file://
+// ============================================================
+function startApp(){
+  // Show a loading state immediately so the page is never blank
+  var app=document.getElementById('app');
+  if(app)app.innerHTML='<div style="padding:60px 20px;text-align:center;color:#64748b;font-family:system-ui,sans-serif"><div style="font-size:32px;margin-bottom:12px">\u2696</div><div style="font-size:15px;font-weight:600;color:#1e293b;margin-bottom:6px">Trust Manager</div><div style="font-size:13px">Loading\u2026</div></div>';
+
+  if(!sbConfigured){
+    // No Supabase credentials — run in localStorage mode immediately
+    init();
+    return;
+  }
+
+  // Dynamically load Supabase so it works on any host
+  var script=document.createElement('script');
+  script.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+  script.onload=function(){
+    try{
+      sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+      // Re-wire the auth listener now that sb exists
+      sb.auth.onAuthStateChange(function(event,session){
+        if(event==='SIGNED_IN'&&session&&!currentUser){
+          currentUser=session.user;
+          authStep='form';
+          loadFromCloud();
+        }
+        if(event==='SIGNED_OUT'){
+          currentUser=null;
+          S={trusts:[],beneficiaries:[],trustees:[],distributions:[],decisions:[],income:[],expenses:[],gains:[]};
+          AT=null;R();
+        }
+      });
+    }catch(e){
+      console.warn('Supabase client failed:',e);
+      sbConfigured=false;
+    }
+    init();
+  };
+  script.onerror=function(){
+    console.warn('Supabase script failed to load — running in local mode');
+    sbConfigured=false;
+    init();
+  };
+  document.head.appendChild(script);
+}
+
+// Guard against any uncaught errors causing a blank page
+window.addEventListener('DOMContentLoaded',function(){
+  try{startApp();}
+  catch(e){
+    console.error('Startup error:',e);
+    var app=document.getElementById('app');
+    if(app)app.innerHTML='<div style="padding:40px;text-align:center;font-family:system-ui,sans-serif"><p style="color:#dc2626;font-size:14px">Something went wrong loading Trust Manager.</p><p style="color:#64748b;font-size:12px;margin-top:8px">Try refreshing the page. If this keeps happening, open the browser console for details.</p></div>';
+  }
+});
 </script>
 </body>
 </html>
