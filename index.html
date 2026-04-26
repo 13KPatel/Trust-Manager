@@ -314,14 +314,17 @@ function obSteps(){
   var hasMoney=hasTrust&&(gin().length>0||gdi().length>0);
   var hasDec=hasTrust&&gdc().length>0;
   var steps=[
-    {n:1,title:'Set up your trust',desc:'Enter the trust name, type, value and date established. This unlocks all other features.',done:hasTrust,action:function(){om('trust')},cta:'Set up trust'},
-    {n:2,title:'Add trustees & beneficiaries',desc:'Record who manages the trust and who benefits from it. This is a legal requirement under the TRS.',done:hasPeople,action:function(){if(hasTrust){sv2('people')}else{om('trust')}},cta:hasTrust?'Go to People':'Set up trust first'},
-    {n:3,title:'Record income & distributions',desc:'Track money coming in and payments going out to beneficiaries, including the tax position on each distribution.',done:hasMoney,action:function(){if(hasTrust){sv2('accounts')}},cta:hasTrust?'Go to Accounts':'Complete step 1 first'},
-    {n:4,title:'Log trustee decisions',desc:'Document every significant decision with your reasoning. This is your Trustee Act 2000 paper trail — essential if decisions are ever challenged.',done:hasDec,action:function(){if(hasTrust){sv2('decisions')}},cta:hasTrust?'Go to Decisions':'Complete step 1 first'},
-    {n:5,title:'Stay on top of deadlines',desc:'SA900, IHT100, TRS updates, R185 certificates — see every compliance deadline for this trust in one place.',done:false,action:function(){if(hasTrust){sv2('dates')}},cta:hasTrust?'View Compliance Calendar':'Complete step 1 first'}
+    // Step 1: ALWAYS active and clickable — never auto-ticked just because data exists.
+    // Opens trust creation modal. When a trust exists, CTA changes to "Edit / add another".
+    {n:1,title:'Set up your trust',desc:'Enter the trust name, type, value and date it was established. This unlocks all the other features.',done:false,alwaysActive:true,onclick:"om('trust')",cta:hasTrust?'Edit trust or add another \u2192':'Create your trust \u2192'},
+    {n:2,title:'Add trustees & beneficiaries',desc:'Record who manages the trust and who benefits from it. This is a legal requirement under the TRS.',done:hasPeople,onclick:hasTrust?"sv2('people')":"om('trust')",cta:hasTrust?'Go to People \u2192':'Complete step 1 first'},
+    {n:3,title:'Record income & distributions',desc:'Track money coming in and payments going out to beneficiaries, including the tax position on each distribution.',done:hasMoney,onclick:hasTrust?"sv2('accounts')":'',cta:hasTrust?'Go to Accounts \u2192':'Complete step 1 first'},
+    {n:4,title:'Log trustee decisions',desc:'Document every significant decision with your reasoning. This is your Trustee Act 2000 paper trail — essential if decisions are ever challenged.',done:hasDec,onclick:hasTrust?"sv2('decisions')":'',cta:hasTrust?'Go to Decisions \u2192':'Complete step 1 first'},
+    {n:5,title:'Stay on top of deadlines',desc:'SA900, IHT100, TRS updates, R185 certificates — see every compliance deadline for this trust in one place.',done:false,alwaysActive:true,onclick:hasTrust?"sv2('dates')":'',cta:hasTrust?'View Compliance Calendar \u2192':'Complete step 1 first'}
   ];
   var next=-1;
-  for(var i=0;i<steps.length;i++){if(!steps[i].done){next=i;break;}}
+  for(var i=0;i<steps.length;i++){if(!steps[i].done&&!steps[i].alwaysActive){next=i;break;}}
+  if(next===-1&&hasTrust)next=4;
   return{steps:steps,next:next,hasTrust:hasTrust};
 }
 
@@ -529,14 +532,33 @@ window.saveGain=function(){
   var o={id:MD.id||gid(),trustId:AT,amount:Number(amt),date:document.getElementById("m-date").value||tdy(),asset:document.getElementById("m-asset").value,isResidential:document.getElementById("m-res").checked};
   if(MD.id){S.gains=S.gains.map(function(v){return v.id===MD.id?o:v})}else{S.gains.push(o)}sv();cm();
 };
+window.confirmDeleteTrust=function(id,name){
+  if(!confirm('Delete "'+name+'"?\n\nThis will permanently remove the trust and ALL its records — beneficiaries, distributions, decisions, accounts and gains.\n\nThis cannot be undone.'))return;
+  S.trusts=S.trusts.filter(function(v){return v.id!==id});
+  S.beneficiaries=S.beneficiaries.filter(function(v){return v.trustId!==id});
+  S.trustees=S.trustees.filter(function(v){return v.trustId!==id});
+  S.distributions=S.distributions.filter(function(v){return v.trustId!==id});
+  S.decisions=S.decisions.filter(function(v){return v.trustId!==id});
+  S.income=S.income.filter(function(v){return v.trustId!==id});
+  S.expenses=S.expenses.filter(function(v){return v.trustId!==id});
+  S.gains=S.gains.filter(function(v){return v.trustId!==id});
+  if(AT===id)AT=S.trusts.length>0?S.trusts[0].id:null;
+  sv();
+  if(currentUser&&sb){sb.from('user_trusts').delete().eq('trust_id',id).eq('user_id',currentUser.id).then(function(){}).catch(function(e){console.warn('Cloud delete error:',e);});}
+  MT=null;MD={};CV=S.trusts.length>0?'dashboard':'home';
+  R();
+};
+
 window.delItem=function(type,id){
-  var map={trust:"trusts",beneficiary:"beneficiaries",trustee:"trustees",distribution:"distributions",decision:"decisions",income:"income",expense:"expenses",gain:"gains"};
+  if(type==="trust"){
+    var tr=S.trusts.find(function(v){return v.id===id});
+    confirmDeleteTrust(id,tr?tr.name:'this trust');
+    return;
+  }
+  var map={beneficiary:"beneficiaries",trustee:"trustees",distribution:"distributions",decision:"decisions",income:"income",expense:"expenses",gain:"gains"};
   var key=map[type];if(!key)return;
   S[key]=S[key].filter(function(v){return v.id!==id});
-  if(type==="trust"){AT=S.trusts.length>0?S.trusts[0].id:null}
-  sv();
-  if(type==="trust"&&currentUser&&sb){sb.from('user_trusts').delete().eq('trust_id',id).eq('user_id',currentUser.id).then(function(){}).catch(function(e){console.warn('Cloud delete error:',e);});}
-  cm();
+  sv();cm();
 };
 
 // ============================================================
@@ -612,22 +634,50 @@ function R(){
     h+='<div style="font-size:11px;font-weight:700;letter-spacing:1px;color:#64748b;text-transform:uppercase;margin-bottom:10px">Your setup checklist</div>';
     ob.steps.forEach(function(step,i){
       var isDone=step.done;
-      var isActive=!isDone&&(i===0||ob.steps[i-1].done);
+      var isAlways=step.alwaysActive;
+      // A step is "active" (highlighted, clickable) if:
+      // — it's flagged alwaysActive, OR
+      // — it's the next incomplete step (previous step is done)
+      var prevDone=(i===0)||(ob.steps[i-1].done||ob.steps[i-1].alwaysActive);
+      var isActive=isAlways||(!isDone&&prevDone);
       var isPending=!isDone&&!isActive;
       var cls='ob-step '+(isDone?'done-step':isActive?'active-step':'pending-step');
       var numCls=isDone?'done':isActive?'active':'pending';
-      var onclick=isPending?'':'onclick="'+( i===0?"om('trust')":'sv2(\''+(['','people','accounts','decisions','dates'][i])+'\')')+'"';
-      h+='<div class="'+cls+'" '+onclick+'>';
+      var hasOnclick=step.onclick&&!isPending;
+      var onclickAttr=hasOnclick?'onclick="'+step.onclick+'"':'';
+      h+='<div class="'+cls+'" '+onclickAttr+'>';
       h+='<div class="ob-num '+numCls+'">'+(isDone?'&#10003;':step.n)+'</div>';
       h+='<div class="ob-body">';
       h+='<div class="ob-title">'+esc(step.title)+'</div>';
       h+='<div class="ob-desc">'+esc(step.desc)+'</div>';
-      if(isActive)h+='<div class="ob-cta">'+esc(step.cta)+' \u2192</div>';
+      if(isActive||isDone)h+='<div class="ob-cta" style="color:'+(isDone?'#059669':'#1e40af')+'">'+esc(step.cta)+'</div>';
       h+='</div>';
       if(isDone)h+='<div class="ob-tick" style="color:#059669">&#10003;</div>';
-      if(isActive)h+='<div class="ob-tick" style="color:#1e40af">\u2192</div>';
+      else if(isActive)h+='<div class="ob-tick" style="color:#1e40af">\u2192</div>';
       h+='</div>';
     });
+
+    // Manage trusts section — shown when at least one trust exists
+    if(ob.hasTrust){
+      h+='<div style="margin-top:24px">';
+      h+='<div style="font-size:11px;font-weight:700;letter-spacing:1px;color:#64748b;text-transform:uppercase;margin-bottom:10px">Your trusts</div>';
+      S.trusts.forEach(function(tr){
+        var isActive=tr.id===AT;
+        h+='<div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;'+(isActive?'border-color:#1e40af;':'')+'margin-bottom:8px">';
+        h+='<div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">';
+        h+='<div style="width:8px;height:8px;border-radius:50%;background:'+(isActive?'#1e40af':'#cbd5e1')+';flex-shrink:0"></div>';
+        h+='<div style="min-width:0"><div style="font-weight:700;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(tr.name)+'</div>';
+        h+='<div style="font-size:11px;color:#64748b;margin-top:2px">'+esc(tr.type)+' \u00B7 Est. '+fd(tr.established)+'</div></div>';
+        h+='</div>';
+        h+='<div style="display:flex;gap:6px;flex-shrink:0;margin-left:10px">';
+        if(!isActive)h+='<button onclick="chgT(\''+esc(tr.id)+'\')" style="background:#f1f5f9;border:1px solid #e5e1dc;border-radius:6px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;color:#1e293b">Switch</button>';
+        h+='<button onclick="om(\'trust\',\''+esc(tr.id)+'\')" style="background:#f1f5f9;border:1px solid #e5e1dc;border-radius:6px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;color:#1e293b">Edit</button>';
+        h+='<button onclick="confirmDeleteTrust(\''+esc(tr.id)+'\',\''+esc(tr.name)+'\')" style="background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;color:#dc2626">Remove</button>';
+        h+='</div>';
+        h+='</div>';
+      });
+      h+='</div>';
+    }
 
     h+='<div class="warn" style="margin-top:20px"><div class="wt">You are personally responsible</div><div class="wb">As a trustee you have legal duties under the Trustee Act 2000. Mistakes can make you personally liable to beneficiaries for any loss caused. This app helps you keep records and understand your obligations — but it does not replace professional advice. Always consult a solicitor or accountant for significant decisions.</div></div>';
 
