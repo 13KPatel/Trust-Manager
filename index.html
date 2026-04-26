@@ -29,7 +29,8 @@ button{font-family:inherit}
 .card{background:#fff;border:1px solid #e5e1dc;border-radius:12px;padding:18px 20px;margin-bottom:10px}
 .card-click{cursor:pointer}
 .card-click:active{border-color:#cbd5e1}
-.tabs{display:flex;border-bottom:1px solid #e5e1dc;padding:14px 20px 0;overflow-x:auto;gap:0;-webkit-overflow-scrolling:touch}
+.tabs{display:flex;border-bottom:1px solid #e5e1dc;padding:14px 20px 0;overflow-x:auto;gap:0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
 .tab{padding:8px 0;margin-right:16px;border:none;background:none;border-bottom:2px solid transparent;color:#64748b;cursor:pointer;font-size:12px;font-weight:500;white-space:nowrap}
 .tab.active{color:#1e293b;font-weight:700;border-bottom-color:#1e293b}
 .content{max-width:960px;margin:0 auto;padding:20px 20px 60px}
@@ -69,8 +70,53 @@ button{font-family:inherit}
 .tax-row span:last-child{font-weight:700}
 .auth-overlay{position:fixed;inset:0;background:rgba(15,23,42,0.75);z-index:500;display:flex;align-items:center;justify-content:center;padding:16px}
 .auth-box{background:#fff;border-radius:16px;padding:32px 28px;max-width:400px;width:100%}
-.sync-badge{font-size:11px;padding:2px 6px;border-radius:6px}
-@media(max-width:600px){.g2,.g3,.g4,.two-col{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr}.header{padding:12px 16px}.tabs{padding:10px 16px 0}.content{padding:16px 16px 60px}}
+/* Onboarding home page */
+.ob-step{display:flex;gap:14px;padding:16px 18px;background:#fff;border:1px solid #e5e1dc;border-radius:12px;margin-bottom:8px;cursor:pointer;transition:border-color .15s}
+.ob-step:active{opacity:0.85}
+.ob-step.active-step{border-color:#1e40af;border-left:3px solid #1e40af}
+.ob-step.done-step{border-color:#e5e1dc;background:#fafaf9}
+.ob-step.pending-step{opacity:0.55;cursor:default}
+.ob-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:2px}
+.ob-num.done{background:#dcfce7;color:#166534}
+.ob-num.active{background:#1e40af;color:#fff}
+.ob-num.pending{background:#f1f5f9;color:#94a3b8}
+.ob-body{flex:1;min-width:0}
+.ob-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.ob-desc{font-size:12px;color:#64748b;line-height:1.6}
+.ob-cta{font-size:12px;font-weight:600;color:#1e40af;margin-top:6px;display:inline-block}
+.ob-tick{font-size:18px;flex-shrink:0;align-self:center}
+.about-box{background:#1e293b;border-radius:14px;padding:24px;margin-bottom:20px;color:#fff}
+.about-box h2{font-size:18px;margin-bottom:8px;color:#fff}
+.about-box p{font-size:13px;color:rgba(255,255,255,0.7);line-height:1.75}
+.about-box .ab-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.about-box .ab-tag{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7)}
+/* Guide page */
+.guide-search{background:#fff;border:1px solid #e5e1dc;border-radius:10px;padding:10px 14px;font-size:14px;font-family:inherit;outline:none;width:100%;margin-bottom:12px}
+.guide-search:focus{border-color:#1e40af}
+.gcats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.gcat{font-size:11px;padding:5px 12px;border-radius:20px;border:1px solid #e5e1dc;background:#fff;color:#64748b;cursor:pointer;font-weight:500;white-space:nowrap}
+.gcat.active{background:#1e293b;color:#fff;border-color:#1e293b}
+.ge{background:#fff;border:1px solid #e5e1dc;border-radius:12px;margin-bottom:8px;overflow:hidden}
+.ge-head{display:flex;align-items:flex-start;gap:10px;padding:14px 16px;cursor:pointer}
+.ge-head:hover{background:#fafaf9}
+.ge-cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.ge-title{font-size:14px;font-weight:700;flex:1}
+.ge-summary{font-size:12px;color:#64748b;margin-top:2px;line-height:1.5}
+.ge-chevron{font-size:16px;color:#94a3b8;flex-shrink:0;transition:transform .2s}
+.ge-chevron.open{transform:rotate(180deg)}
+.ge-body{display:none;padding:0 16px 16px;border-top:1px solid #f1f5f9}
+.ge-body.open{display:block}
+.ge-body p{font-size:13px;color:#475569;line-height:1.75;margin-top:12px}
+.ge-body p:first-child{margin-top:12px}
+.ge-body strong{color:#1e293b;font-weight:600}
+.ge-example{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;margin-top:12px}
+.ge-example-label{font-size:10px;font-weight:700;letter-spacing:1px;color:#1e40af;text-transform:uppercase;margin-bottom:8px}
+.ge-example p{font-size:12px;color:#334155;line-height:1.7;margin-top:0}
+.ge-example p+p{margin-top:6px}
+.guide-empty{text-align:center;padding:40px 20px;color:#64748b;font-size:13px}
+.cat-header{font-size:10px;font-weight:700;letter-spacing:1.5px;color:#64748b;text-transform:uppercase;margin:20px 0 8px 2px}
+.cat-header:first-child{margin-top:0}
+@media(max-width:600px){.g2,.g3,.g4,.two-col{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr}.header{padding:12px 16px}.tabs{padding:10px 16px 0}.content{padding:16px 16px 60px}.ob-step{gap:10px}}
 </style>
 </head>
 <body>
@@ -84,18 +130,7 @@ STEP 1: Replace the two lines below with your Supabase credentials.
   Create a free project at https://supabase.com (pick EU/London region).
   Find these in: Project Settings > API
 
-STEP 2: Run the SQL block below in your Supabase SQL Editor
-  (Database > SQL Editor > New query, then paste and run).
-================================================================
-*/
-
-var SUPABASE_URL = 'https://YOUR-PROJECT-ID.supabase.co';
-var SUPABASE_ANON_KEY = 'YOUR-ANON-KEY-HERE';
-
-/*
-================================================================
-SUPABASE SQL — paste and run once in SQL Editor
-================================================================
+STEP 2: Run this SQL in your Supabase SQL Editor:
 
 create table if not exists user_trusts (
   trust_id text primary key,
@@ -103,21 +138,16 @@ create table if not exists user_trusts (
   trust_data jsonb not null default '{}',
   updated_at timestamptz default now()
 );
-
 create index if not exists user_trusts_user_id_idx on user_trusts (user_id);
-
 alter table user_trusts enable row level security;
-
 create policy "users access own trusts only"
-  on user_trusts for all
-  using (auth.uid() = user_id);
+  on user_trusts for all using (auth.uid() = user_id);
 
-================================================================
-That's it. One table, one policy. The app stores each trust and
-all its related data (beneficiaries, distributions, decisions,
-accounts, gains) as a JSON document in trust_data.
 ================================================================
 */
+
+var SUPABASE_URL = 'https://YOUR-PROJECT-ID.supabase.co';
+var SUPABASE_ANON_KEY = 'YOUR-ANON-KEY-HERE';
 
 // ============================================================
 // APP STATE
@@ -132,17 +162,120 @@ var ECA=["Legal Fees","Accountancy","Tax Payment","Insurance","Property Maintena
 var DTP=["Income - Non-Savings","Income - Savings","Income - Dividends","Capital"];
 var NRB=325000;
 var S={trusts:[],beneficiaries:[],trustees:[],distributions:[],decisions:[],income:[],expenses:[],gains:[]};
-var AT=null,CV="dashboard",MT=null,MD={};
-
-// Cloud sync state
+var AT=null,CV="home",MT=null,MD={};
 var currentUser=null;
-var syncStatus='idle'; // idle | syncing | saved | error | offline
-var authStep='form';   // form | sent
+var syncStatus='idle';
+var authStep='form';
 var authEmail='';
-
-// Supabase client — initialised in startApp() after dynamic script load
 var sb=null;
 var sbConfigured=(SUPABASE_URL.indexOf('YOUR-PROJECT-ID')===-1&&SUPABASE_URL.indexOf('YOUR-')===-1);
+var GQ=''; // guide search query
+var GC='all'; // guide category filter
+
+// ============================================================
+// GUIDE DATA
+// ============================================================
+var GD=[
+  // TRUST TYPES
+  {id:'discretionary',cat:'trust-types',color:'#7c3aed',title:'Discretionary trust',summary:'Trustees decide who benefits, how much, and when.',
+   body:'<p>A discretionary trust gives the trustees complete flexibility. No single beneficiary has a fixed right to any income or capital — trustees decide how to distribute funds from a class of potential beneficiaries named in the deed.</p><p>This flexibility makes discretionary trusts the most common choice for IHT planning, but it comes with the most complex tax treatment. The trust is taxed as a separate entity at the <strong>Rate Applicable to Trusts</strong> (45% on income, 39.35% on dividends). Trustees must issue an <strong>R185 certificate</strong> to beneficiaries when distributing income.</p><p>For IHT, discretionary trusts sit inside the <strong>relevant property regime</strong> — meaning they face a 10-year periodic charge and exit charges when capital leaves.</p>',
+   example:'<p>The Smith Family Trust has three potential beneficiaries: two adult children and a grandchild. Each year, trustees review the family\'s circumstances and decide whether to distribute income and how much to each person. One year they may give everything to the grandchild for school fees; the next year nothing at all. That discretion is protected by the trust deed.</p>'},
+  {id:'bare',cat:'trust-types',color:'#059669',title:'Bare trust',summary:'Beneficiary owns the assets outright — the trustee is just a nominee.',
+   body:'<p>A bare trust is the simplest form. The beneficiary has an <strong>absolute, immediate right</strong> to both the income and the capital. The trustee holds the assets in name only — they cannot exercise any discretion over how or when assets are distributed.</p><p>Bare trusts are <strong>transparent for tax purposes</strong> — HMRC treats the assets as if the beneficiary owns them directly. The beneficiary pays tax on income and gains at their own rates, not the trust rates. This makes bare trusts tax-efficient if the beneficiary is a basic-rate taxpayer or non-taxpayer.</p><p>Commonly used to hold assets for children until they turn 18, or for straightforward nominee arrangements.</p>',
+   example:'<p>A parent sets up a bare trust holding £50,000 of shares for their child. The child has an absolute right to the shares and all dividends. When the child turns 18, the parent (as trustee) simply transfers the shares into the child\'s own name. Any dividends paid during the trust are taxed on the child, not the parent.</p>'},
+  {id:'iip',cat:'trust-types',color:'#0891b2',title:'Interest in possession trust',summary:'One beneficiary has the right to income now; others receive capital later.',
+   body:'<p>In an interest in possession (IIP) trust, the <strong>life tenant</strong> has a legal right to receive all the income from the trust assets as it arises. A second group of beneficiaries (called <strong>remaindermen</strong>) will receive the capital when the trust ends — usually on the life tenant\'s death.</p><p>The trust pays income tax at basic rate (20%) on non-savings income and 8.75% on dividends. The life tenant then declares the gross income on their own Self Assessment return and claims credit for the tax already paid. This means the effective rate matches the life tenant\'s own marginal rate.</p><p>For IHT purposes, if the IIP arose before 22 March 2006, the assets are treated as part of the life tenant\'s estate — <strong>not</strong> the relevant property regime. Post-2006 IIPs in new trusts are generally treated as relevant property unless they qualify as an IPDI.</p>',
+   example:'<p>A widow is the life tenant of her late husband\'s will trust. She receives all income (rental income from a property held in trust) during her lifetime. On her death, the property passes to their children. The property is treated as part of her estate for IHT, not subject to the 10-year periodic charge.</p>'},
+  {id:'will-trust',cat:'trust-types',color:'#d97706',title:'Will trust',summary:'Created by a will — comes into existence when the testator dies.',
+   body:'<p>A will trust (also called a testamentary trust) is set up by the terms of someone\'s will. It only comes into existence when the person dies and their estate is administered. The deceased\'s personal representatives transfer the relevant assets into the trust.</p><p>Common types include trusts for minor children (so they don\'t inherit outright at 18) and trusts for a surviving spouse with children from a previous relationship. The tax treatment depends entirely on what type of trust the will creates — discretionary, IIP, bare, etc.</p><p>An <strong>Immediate Post-Death Interest (IPDI)</strong> is a special category: an IIP that arises immediately from a will trust. The assets are treated as part of the life tenant\'s estate for IHT, not as relevant property.</p>',
+   example:'<p>A father\'s will leaves his estate in trust for his three children, to be distributed when the youngest turns 25. Until then, trustees can apply income for the children\'s education and maintenance (s.31 Trustee Act 1925 power). This is a discretionary will trust — the 10-year periodic charge will apply from the 10th anniversary of the father\'s death.</p>'},
+  {id:'charitable',cat:'trust-types',color:'#be185d',title:'Charitable trust',summary:'Established for charitable purposes — exempt from most UK tax.',
+   body:'<p>A charitable trust must exist solely for purposes that are charitable under the Charities Act 2011 (relief of poverty, education, religion, health, community benefit, etc.). It must register with the Charity Commission if its income exceeds £5,000 a year.</p><p>Charitable trusts are exempt from income tax on most income, exempt from CGT, and entirely outside the IHT relevant property regime — no 10-year charges, no exit charges. Donations to the trust may also qualify for Gift Aid, increasing their value by 25%.</p><p>Trustees of charitable trusts have additional obligations under charity law, including annual accounts filed with the Charity Commission and a duty to further the charitable objects only.</p>',
+   example:''},
+
+  // PEOPLE
+  {id:'settlor',cat:'people',color:'#1e40af',title:'Settlor',summary:'The person who creates the trust and puts assets into it.',
+   body:'<p>The settlor is the person who sets up the trust and transfers assets into it. In a family trust, this is usually a parent or grandparent doing IHT planning. In a will trust, the settlor is the deceased person.</p><p>The settlor\'s personal tax position matters significantly to the trust\'s tax calculations. Specifically: any <strong>Chargeable Lifetime Transfers (CLTs)</strong> the settlor made in the 7 years before setting up this trust reduce the nil-rate band available to the trust for its 10-year periodic charge. The number of trusts the settlor has created also affects the CGT Annual Exempt Amount each trust gets.</p><p>If the settlor (or their spouse) can benefit from the trust — even indirectly — it becomes a <strong>settlor-interested trust</strong>, which has very different income tax treatment (all income is taxed on the settlor at their marginal rate).</p>',
+   example:''},
+  {id:'trustee',cat:'people',color:'#1e40af',title:'Trustee',summary:'Legally responsible for managing the trust — you.',
+   body:'<p>Trustees hold the trust assets in their own names but for the benefit of the beneficiaries. You have personal legal responsibility for every decision made in the administration of the trust. This is not a formality — if you breach your duties, you can be personally liable to the beneficiaries for any loss caused.</p><p>Your key duties under the <strong>Trustee Act 2000</strong> are: to exercise reasonable care and skill; to invest prudently using the standard investment criteria; to keep proper accounts and records; and to act in the best interests of all beneficiaries (both present and future).</p><p>There is no legal minimum or maximum number of trustees, but most trusts have two to four. A sole trustee can act, but it is not advisable — having at least two trustees provides a safeguard and is required for some transactions (e.g. receipt of capital money from land).</p>',
+   example:''},
+  {id:'beneficiary',cat:'people',color:'#1e40af',title:'Beneficiary',summary:'The person or people who benefit from the trust assets.',
+   body:'<p>Beneficiaries are those who are entitled (or potentially entitled) to benefit from the trust. In a discretionary trust, beneficiaries have no automatic right to anything — trustees decide who gets what. In a bare trust or IIP trust, beneficiaries have fixed entitlements.</p><p>Beneficiaries of discretionary trusts do not have an automatic right to see the trust accounts, but courts can order disclosure. Keeping clear records protects trustees from disputes.</p><p>Each beneficiary\'s own tax position matters when planning distributions — a basic-rate taxpayer beneficiary receiving income from a discretionary trust can reclaim some of the 45% tax credit paid by the trust, whereas a non-taxpayer may be able to reclaim it all.</p>',
+   example:''},
+  {id:'protector',cat:'people',color:'#1e40af',title:'Protector',summary:'An optional appointment with powers to oversee or veto trustee decisions.',
+   body:'<p>A protector is a person named in the trust deed with specific powers — typically to remove and replace trustees, or to veto certain decisions (such as adding beneficiaries or making large capital distributions). Not all trusts have a protector; it is an optional feature more common in offshore or complex family trusts.</p><p>The role is a safeguard for the settlor: it allows someone trusted by the settlor to keep oversight without being a trustee themselves. The powers of a protector are defined entirely by the trust deed — there is no standard statutory role.</p>',
+   example:''},
+
+  // TAX
+  {id:'clt',cat:'tax',color:'#dc2626',title:'Chargeable lifetime transfer (CLT)',summary:'A gift into a discretionary trust — it uses up the nil-rate band.',
+   body:'<p>When a settlor transfers assets into a discretionary trust while alive, HMRC treats this as a <strong>Chargeable Lifetime Transfer (CLT)</strong>. CLTs are added together on a rolling 7-year basis. If cumulative CLTs exceed the nil-rate band (£325,000), the excess is charged to IHT at <strong>20%</strong> on entry into the trust (the "entry charge").</p><p>CLTs matter beyond the entry charge. In the 7 years before the trust was established, any prior CLTs the settlor made eat into the nil-rate band available for the trust\'s 10-year periodic charge. This is why the "Settlor Prior CLTs" field in the trust setup is important — entering an incorrect figure will give the wrong periodic charge calculation.</p><p>After 7 years, a CLT drops out of the cumulative total — so older gifts become irrelevant for future calculations.</p>',
+   example:'<p><strong>Entry charge example:</strong></p><p>Settlor has made no prior CLTs. They put £500,000 into a discretionary trust. The NRB is £325,000. The excess is £175,000. Entry charge = £175,000 × 20% = <strong>£35,000</strong> due on setting up the trust.</p><p>If they had made prior CLTs of £200,000 within 7 years, only £125,000 NRB would remain. Excess = £375,000. Entry charge = £375,000 × 20% = <strong>£75,000</strong>.</p>'},
+  {id:'nrb',cat:'tax',color:'#dc2626',title:'Nil-rate band (NRB)',summary:'The threshold below which no IHT is charged — currently £325,000.',
+   body:'<p>The nil-rate band is the amount anyone can transfer — whether in life or on death — before IHT applies. It has been frozen at <strong>£325,000</strong> since 2009 and is currently frozen until at least 2030.</p><p>Everyone has their own nil-rate band. For trusts, the NRB available to the trust for its 10-year periodic charge is reduced by any CLTs the settlor made in the 7 years before creating the trust.</p><p>The <strong>Residence Nil-Rate Band (RNRB)</strong> of up to £175,000 is an additional allowance for passing a family home to direct descendants — but it is not available to assets held in discretionary trusts. This is a significant planning point if the trust holds property.</p>',
+   example:'<p>A settlor created Trust A in 2018 with £150,000 (a CLT). In 2023 they create Trust B with £400,000. When calculating Trust B\'s 10-year periodic charge: the NRB available to Trust B = £325,000 − £150,000 (prior CLT, within 7 years) = <strong>£175,000</strong>. The periodic charge is calculated on the excess above £175,000, not £325,000.</p>'},
+  {id:'10yr',cat:'tax',color:'#dc2626',title:'10-year periodic charge',summary:'IHT charged on the trust\'s value every 10 years — up to 6%.',
+   body:'<p>Every 10 years from the date the trust was established, HMRC charges IHT on the value of the relevant property in the trust. The maximum effective rate is 6%, but most trusts pay significantly less.</p><p>The calculation works in 4 steps:</p><p><strong>Step 1:</strong> Work out the hypothetical chargeable transfer — the trust\'s current value plus any capital distributions made since the last 10-year anniversary.</p><p><strong>Step 2:</strong> Deduct the available nil-rate band (NRB minus settlor\'s prior CLTs from 7 years before trust was set up).</p><p><strong>Step 3:</strong> Calculate the "lifetime tax" on the excess at 20%, then find the effective rate: lifetime tax ÷ hypothetical transfer.</p><p><strong>Step 4:</strong> The periodic charge rate = effective rate × 30%. Tax due = periodic charge rate × current trust value.</p>',
+   example:'<p><strong>Step-by-step worked example:</strong></p><p>Trust value today: £600,000. No prior CLTs. No capital distributions. NRB: £325,000.</p><p>Step 1 — Hypothetical transfer: £600,000</p><p>Step 2 — Excess over NRB: £600,000 − £325,000 = £275,000</p><p>Step 3 — Lifetime tax: £275,000 × 20% = £55,000. Effective rate: £55,000 ÷ £600,000 = 9.167%</p><p>Step 4 — Periodic rate: 9.167% × 30% = 2.75%. Tax due: £600,000 × 2.75% = <strong>£16,500</strong></p>'},
+  {id:'exit',cat:'tax',color:'#dc2626',title:'Exit charge',summary:'IHT charged when capital leaves the trust between anniversaries.',
+   body:'<p>When capital leaves a discretionary trust — through a capital distribution to a beneficiary, or a transfer of property out of the trust — HMRC charges an exit charge. It is a proportion of the most recent 10-year periodic charge rate, scaled by how many complete quarters have elapsed since the last 10-year anniversary (or, before the first anniversary, since the trust was set up).</p><p>Exit charge rate = periodic charge rate × (quarters elapsed ÷ 40). If the trust has been running for 23 quarters since the last anniversary, the exit rate is 23/40 of the periodic charge rate.</p><p>Exit charges apply only to <strong>capital</strong> leaving the trust. Income distributions do not trigger an exit charge — they may, however, trigger income tax obligations and require an R185 certificate.</p>',
+   example:'<p>Trust periodic charge rate: 2.75%. 18 quarters have passed since the last anniversary. A capital distribution of £100,000 is made.</p><p>Exit rate = 2.75% × (18/40) = 2.75% × 0.45 = <strong>1.238%</strong></p><p>Exit charge = £100,000 × 1.238% = <strong>£1,238</strong></p>'},
+  {id:'cgt',cat:'tax',color:'#dc2626',title:'Capital Gains Tax for trusts',summary:'Trusts pay 24% CGT on gains above a £1,500 annual exempt amount.',
+   body:'<p>When a trust disposes of a capital asset (sells shares, sells property, transfers assets to a beneficiary), any gain above the base cost is subject to Capital Gains Tax.</p><p>For 2025/26 the rate is a flat <strong>24%</strong> for all assets (following the October 2024 Autumn Budget, which equalised the residential and non-residential rates).</p><p>The <strong>Annual Exempt Amount (AEA)</strong> for trusts is £1,500, shared across all trusts created by the same settlor, with a minimum of £300 per trust if there are five or more.</p><p>Losses can be offset against gains in the same year, with any excess carried forward. When assets are distributed from a discretionary trust to a beneficiary, <strong>s.260 hold-over relief</strong> may be available — meaning no immediate CGT is payable and the beneficiary inherits the trust\'s base cost instead.</p><p>Residential property disposals must be reported online and any CGT paid within <strong>60 days</strong> of completion, not just at the annual SA900.</p>',
+   example:'<p>A trust (one of three trusts created by the same settlor) sells shares for a gain of £8,000. AEA = £1,500 ÷ 3 = £500. Taxable gain = £8,000 − £500 = £7,500. CGT = £7,500 × 24% = <strong>£1,800</strong>.</p>'},
+  {id:'income-tax',cat:'tax',color:'#dc2626',title:'Trust income tax rates',summary:'Discretionary trusts pay 45% on income, 39.35% on dividends — before distributions.',
+   body:'<p>The tax rate on trust income depends on the type of trust:</p><p><strong>Discretionary trusts:</strong> Pay the Rate Applicable to Trusts — 45% on non-savings and savings income, 39.35% on dividend income. The first £1,000 of trust income is taxed at the basic rate (20% / 8.75% on dividends) — this is the Standard Rate Band. Only income above £1,000 is taxed at the higher rate.</p><p><strong>Interest in possession trusts:</strong> Trustees pay basic rate (20% on non-savings income, 8.75% on dividends). The life tenant then declares the gross income on their own Self Assessment and pays any additional tax due at their own marginal rate.</p><p><strong>Bare trusts:</strong> Transparent — the beneficiary is taxed directly at their own rates as if they received the income themselves.</p>',
+   example:'<p>A discretionary trust receives £8,000 of rental income. First £1,000 at 20% = £200. Remaining £7,000 at 45% = £3,150. Total tax = <strong>£3,350</strong>. Net income retained = £4,650. When distributed to a beneficiary, they receive credit for all £3,350 of tax paid.</p>'},
+  {id:'seven-year',cat:'tax',color:'#dc2626',title:'The 7-year rule',summary:'Gifts made more than 7 years before death fall outside the IHT net.',
+   body:'<p>Under the 7-year rule, Potentially Exempt Transfers (PETs) — outright gifts between individuals — become fully exempt from IHT if the donor survives 7 years after making them. Between years 3 and 7, taper relief reduces the IHT due.</p><p>CLTs (gifts into discretionary trusts) work differently. They are immediately chargeable when made. After 7 years they fall out of the donor\'s cumulative total, freeing up nil-rate band for future CLTs or the person\'s estate on death.</p><p>For trust calculations, the relevant question is: what CLTs did the settlor make in the <strong>7 years before setting up this trust</strong>? Those reduce the NRB available to the trust for periodic charges.</p>',
+   example:''},
+  {id:'bpr',cat:'tax',color:'#dc2626',title:'Business Property Relief (BPR)',summary:'Qualifying business assets can reduce or eliminate IHT charges.',
+   body:'<p>Business Property Relief can reduce the taxable value of qualifying assets by either 50% or 100% for IHT purposes. This applies to periodic charges, exit charges, and entry charges on the portion of trust assets that qualify.</p><p><strong>100% relief</strong>: unquoted shares, a business or interest in a business (e.g. a partnership share).</p><p><strong>50% relief</strong>: shares in a quoted company where the transferor has voting control, or assets used in a business or by a company in which the transferor has a controlling interest.</p><p>The asset must generally have been held for at least 2 years. HMRC can challenge BPR where the business\'s main activity is holding or dealing in investments.</p>',
+   example:''},
+  {id:'apr',cat:'tax',color:'#dc2626',title:'Agricultural Property Relief (APR)',summary:'Qualifying farmland and buildings can attract relief from IHT.',
+   body:'<p>APR reduces the agricultural value of qualifying agricultural property by 50% or 100% for IHT purposes, including periodic and exit charges on trust assets.</p><p><strong>100% relief</strong>: owner-occupied farmland, or land let on a tenancy beginning on or after 1 September 1995 (or earlier tenancies where the landlord has been entitled to vacant possession within the last 12 months).</p><p><strong>50% relief</strong>: other agricultural tenancies.</p><p>Only the agricultural value attracts relief. Any additional development value or other non-agricultural value is not covered by APR (though BPR may apply to some of it).</p>',
+   example:''},
+  {id:'settlor-interested',cat:'tax',color:'#dc2626',title:'Settlor-interested trust rules',summary:'If the settlor can benefit from the trust, HMRC taxes income on them — not the trust.',
+   body:'<p>A trust is "settlor-interested" if the settlor, their spouse or civil partner, or their minor unmarried children can benefit from the trust assets or income — even potentially or indirectly.</p><p>Under ITTOIA 2005 s.624, all trust income is treated as the settlor\'s own income for tax purposes. Instead of the trust paying 45%, the income is added to the settlor\'s personal income and taxed at their marginal rate. This can dramatically change the tax position — better if the settlor is a non-taxpayer; worse if they are an additional-rate taxpayer with no trust rate credit to offset.</p><p>This is an easy rule to trigger accidentally — for example, if the deed allows trustees to add the settlor as a beneficiary, or if the settlor retained the power to appoint assets back to themselves.</p>',
+   example:''},
+
+  // DISTRIBUTIONS
+  {id:'income-dist',cat:'distributions',color:'#059669',title:'Income distribution',summary:'Paying out trust income to beneficiaries — carries a tax credit they can use.',
+   body:'<p>When a discretionary trust distributes income to a beneficiary, the payment carries a <strong>tax credit</strong> equal to the tax the trustees have already paid. This is the "gross-up" mechanism.</p><p>Because trustees pay 45% on non-savings income, a beneficiary receiving a net payment of £550 is treated as having received £1,000 gross income with £450 of tax paid on their behalf. A higher-rate taxpayer would owe nothing further. A basic-rate taxpayer would owe 20% − 0% (tax credits cover it). A non-taxpayer could reclaim the difference.</p><p>Trustees must issue an <strong>R185 (Certificate of Deduction of Income Tax)</strong> to every beneficiary who receives an income distribution. This certificate shows the gross amount and the tax credit, which the beneficiary needs to complete their own tax return.</p>',
+   example:'<p>A trust distributes £5,500 net income to a beneficiary. Tax already paid by trustees at 45% on £10,000 gross = £4,500. Gross-up: £5,500 ÷ (1 − 0.45) = £10,000 gross. Tax credit on R185: £4,500.</p><p>If the beneficiary is a basic-rate taxpayer (20%), their liability on £10,000 = £2,000. Tax credit = £4,500. Repayable by HMRC: <strong>£2,500</strong>.</p>'},
+  {id:'capital-dist',cat:'distributions',color:'#059669',title:'Capital distribution',summary:'Paying out capital from the trust — may trigger an exit charge.',
+   body:'<p>A capital distribution is a payment to a beneficiary out of the trust\'s capital rather than its income. This could be cash, or the transfer of a physical asset (property, shares).</p><p>Capital distributions from discretionary trusts may trigger an <strong>exit charge</strong> — a proportionate IHT charge based on the time elapsed since the last 10-year anniversary. The trustees calculate and pay this before or at the time of the distribution.</p><p>Capital distributions do not carry a tax credit in the same way income distributions do. However, if the trust transfers a capital asset to a beneficiary, this is a disposal for CGT purposes unless <strong>s.260 hold-over relief</strong> is claimed — which defers the gain and passes the base cost to the beneficiary.</p>',
+   example:''},
+  {id:'r185',cat:'distributions',color:'#059669',title:'R185 — Certificate of income tax',summary:'Must be issued to beneficiaries who receive income distributions.',
+   body:'<p>Form R185 (officially "Certificate of Income Tax Deducted") is a certificate that trustees must give to every beneficiary who receives an income distribution from the trust in a tax year. It shows the gross amount of income treated as having been paid, and the amount of income tax already deducted.</p><p>Beneficiaries need the R185 to complete their own Self Assessment tax return. Without it, they cannot claim credit for the tax already paid by the trustees, and HMRC may assess them on the gross amount again.</p><p>The deadline for issuing R185 certificates is <strong>5 July</strong> following the end of the tax year in which the distribution was made. There is no specific HMRC form to complete online — trustees create the certificate from the trust accounts, and it must be signed. HMRC provides a template on gov.uk.</p>',
+   example:''},
+  {id:'s31',cat:'distributions',color:'#059669',title:'Trustee Act 1925 s.31 — Maintenance',summary:'Power to use income for the maintenance of minor beneficiaries.',
+   body:'<p>Section 31 of the Trustee Act 1925 gives trustees a statutory power to apply income arising in the trust for the <strong>maintenance, education or benefit</strong> of a minor beneficiary. This applies unless the trust deed expressly excludes or modifies it.</p><p>Income not applied for a minor\'s maintenance is accumulated. When the minor reaches 18 (or marries before then), accumulated income becomes their absolute entitlement as capital.</p><p>This power is useful for will trusts holding money for children — trustees can pay school fees, living expenses, or other costs from income without making a formal capital advancement. The decision and amount should be documented in the decision log.</p>',
+   example:''},
+  {id:'s32',cat:'distributions',color:'#059669',title:'Trustee Act 1925 s.32 — Advancement',summary:'Power to advance up to half of a beneficiary\'s share before they are entitled.',
+   body:'<p>Section 32 gives trustees a statutory power to advance up to <strong>half of a beneficiary\'s presumptive share</strong> of capital before they are entitled to receive it. This applies unless the trust deed excludes or extends the power.</p><p>An advancement is a capital payment made early — for example, giving a beneficiary funds to buy a house or start a business before the trust would otherwise distribute. If the beneficiary later receives their full entitlement, the advancement is taken into account.</p><p>The advancement must be for the beneficiary\'s benefit. Trustees should record the reasoning in the decision log. Prior consent of any beneficiary with a prior interest (e.g. a life tenant) is required.</p>',
+   example:''},
+
+  // COMPLIANCE
+  {id:'trs',cat:'compliance',color:'#1e40af',title:'Trust Registration Service (TRS)',summary:'All UK trusts must be registered — and updated within 90 days of changes.',
+   body:'<p>The Trust Registration Service is HMRC\'s online register of trusts. Since 1 September 2022, most UK trusts must register, including non-taxable trusts — not just those with a tax liability. Trusts that are registered with the Charity Commission and bare trusts holding assets for up to two years are among the exempt categories.</p><p>You register (or manage registrations) at the TRS portal on gov.uk. You will need the trust\'s details, information on the settlor, all trustees, and all beneficial owners (beneficiaries with a fixed entitlement, and the class description for discretionary trusts).</p><p>After initial registration, you must update the register within <strong>90 days</strong> of any relevant change — new trustees, change of beneficiary details, change of trust address, etc. Failure to register or keep the register up to date can result in penalties. HMRC can issue a £100 penalty for non-registration.</p>',
+   example:''},
+  {id:'sa900',cat:'compliance',color:'#1e40af',title:'SA900 Trust and Estate Tax Return',summary:'The annual tax return for trusts — due 31 October (paper) or 31 January (online).',
+   body:'<p>SA900 is the annual Self Assessment tax return for trusts and estates. It covers all income received by the trust in the tax year (6 April to 5 April), and any capital gains from disposals during the year.</p><p>The deadlines are: <strong>31 October</strong> for paper returns, <strong>31 January</strong> for online filing. Any tax due must also be paid by 31 January. Late filing incurs an automatic £100 penalty, rising with further delay.</p><p>The SA900 requires supplementary pages depending on the trust\'s activity: income (SA901), capital gains (SA904), non-residence (SA906), and others. Trustees are responsible for filing even if they use an accountant — the accountability rests with the trustees.</p><p>Simple trusts with no tax liability (e.g. a bare trust below the reporting threshold) may not need to file, but check with HMRC or a tax adviser.</p>',
+   example:''},
+  {id:'iht100',cat:'compliance',color:'#1e40af',title:'IHT100 — Reporting chargeable events',summary:'File with HMRC within 6 months of a 10-year anniversary or exit charge.',
+   body:'<p>Form IHT100 is the return trustees must submit to HMRC when a chargeable IHT event occurs in the trust. The main events are: a 10-year periodic charge, an exit charge on a capital distribution, or a change in the beneficial interests that triggers a charge.</p><p>The IHT100 must be submitted within <strong>6 months of the end of the month in which the chargeable event occurred</strong>. The tax due must also be paid by this deadline — late payment incurs interest.</p><p>A filing is only required if the chargeable transfer (the hypothetical transfer used in the periodic charge calculation) exceeds <strong>80% of the nil-rate band</strong> (currently 80% × £325,000 = £260,000). Below this threshold, trustees still calculate whether any tax is due, but do not need to file a return.</p>',
+   example:'<p>A trust had its 10-year anniversary on 15 March 2025. IHT100 must be filed and tax paid by <strong>30 September 2025</strong> (6 months from the end of March). If the hypothetical transfer was £220,000 (below 80% of £325,000 = £260,000), no return is needed even though the charge was calculated.</p>'},
+  {id:'ta2000',cat:'compliance',color:'#1e40af',title:'Trustee Act 2000 — Duty of care',summary:'Trustees must act with reasonable care and skill in all they do.',
+   body:'<p>The Trustee Act 2000 introduced a statutory duty of care: trustees must exercise such care and skill as is reasonable in the circumstances, having regard to any special knowledge or experience they have (or hold themselves out as having). Professional trustees are held to a higher standard.</p><p>The duty of care applies to: exercising investment powers, acquiring land, appointing agents and nominees, reviewing those appointments, and insuring trust assets.</p><p>Practically, this means trustees should: take appropriate advice before making significant investment decisions; document the reasoning behind major decisions (the decision log in this app is designed for exactly this); review investments at reasonable intervals; and not simply do nothing with trust assets.</p>',
+   example:''},
+  {id:'sic',cat:'compliance',color:'#1e40af',title:'Standard investment criteria',summary:'Trustees must consider suitability and diversification when investing.',
+   body:'<p>Section 4 of the Trustee Act 2000 sets out the standard investment criteria that trustees must apply when exercising any investment power: (1) the suitability of the proposed investment to the trust, and (2) the need for diversification of trust investments in so far as is appropriate to the circumstances.</p><p>Trustees must also periodically <strong>review</strong> the trust\'s investments and consider whether they remain suitable. There is no fixed interval prescribed by law, but annual review is the accepted standard.</p><p>Before investing, trustees should take proper advice from a person qualified to give it (s.5 TA 2000) — unless the trustees reasonably conclude that advice is unnecessary given the circumstances. This means documenting why no advice was sought when that decision is made.</p>',
+   example:''},
+  {id:'delegation',cat:'compliance',color:'#1e40af',title:'Delegation — Trustee Act 2000',summary:'Investment management can be delegated to a professional, but trustees remain responsible.',
+   body:'<p>Trustees may delegate their asset management functions to an authorised agent under the Trustee Act 2000 (s.11–27). This typically means instructing a fund manager or financial adviser to manage the trust\'s investments on a discretionary basis.</p><p>Delegation must be in writing. Trustees must provide the agent with a <strong>policy statement</strong> setting out how they want the trust investments managed (objectives, risk appetite, restrictions). Trustees must then periodically review whether the arrangement and the agent\'s compliance with the policy statement remain appropriate.</p><p>Crucially: <strong>delegation does not remove liability</strong>. If trustees fail to review the agent\'s performance and the trust suffers loss, they can still be held personally liable. Keep records of every review.</p>',
+   example:''},
+];
 
 // ============================================================
 // UTILITY FUNCTIONS
@@ -172,7 +305,28 @@ function bna(id){var b=gbe().find(function(v){return v.id===id});return b?b.name
 function findItem(type,id){var map={trust:"trusts",beneficiary:"beneficiaries",trustee:"trustees",distribution:"distributions",decision:"decisions",income:"income",expense:"expenses",gain:"gains"};var key=map[type];if(!key)return{};var item=S[key].find(function(v){return v.id===id});return item?JSON.parse(JSON.stringify(item)):{}}
 
 // ============================================================
-// TAX CALCULATIONS (unchanged)
+// ONBOARDING PROGRESS
+// ============================================================
+function obSteps(){
+  var t=gt();
+  var hasTrust=S.trusts.length>0;
+  var hasPeople=hasTrust&&(gbe().length>0||gtr().length>0);
+  var hasMoney=hasTrust&&(gin().length>0||gdi().length>0);
+  var hasDec=hasTrust&&gdc().length>0;
+  var steps=[
+    {n:1,title:'Set up your trust',desc:'Enter the trust name, type, value and date established. This unlocks all other features.',done:hasTrust,action:function(){om('trust')},cta:'Set up trust'},
+    {n:2,title:'Add trustees & beneficiaries',desc:'Record who manages the trust and who benefits from it. This is a legal requirement under the TRS.',done:hasPeople,action:function(){if(hasTrust){sv2('people')}else{om('trust')}},cta:hasTrust?'Go to People':'Set up trust first'},
+    {n:3,title:'Record income & distributions',desc:'Track money coming in and payments going out to beneficiaries, including the tax position on each distribution.',done:hasMoney,action:function(){if(hasTrust){sv2('accounts')}},cta:hasTrust?'Go to Accounts':'Complete step 1 first'},
+    {n:4,title:'Log trustee decisions',desc:'Document every significant decision with your reasoning. This is your Trustee Act 2000 paper trail — essential if decisions are ever challenged.',done:hasDec,action:function(){if(hasTrust){sv2('decisions')}},cta:hasTrust?'Go to Decisions':'Complete step 1 first'},
+    {n:5,title:'Stay on top of deadlines',desc:'SA900, IHT100, TRS updates, R185 certificates — see every compliance deadline for this trust in one place.',done:false,action:function(){if(hasTrust){sv2('dates')}},cta:hasTrust?'View Compliance Calendar':'Complete step 1 first'}
+  ];
+  var next=-1;
+  for(var i=0;i<steps.length;i++){if(!steps[i].done){next=i;break;}}
+  return{steps:steps,next:next,hasTrust:hasTrust};
+}
+
+// ============================================================
+// TAX CALCULATIONS
 // ============================================================
 function calcDistTax(dist,trust){
   var amt=Number(dist.amount),type=dist.distType||"Income - Non-Savings",tType=trust.type||"Discretionary";
@@ -184,7 +338,6 @@ function calcDistTax(dist,trust){
   if(tType==="Discretionary"||tType==="Mixed"){var gu=amt/(1-rate);return{grossUp:gu,taxCredit:gu-amt,rate:rate,note:"Tax credit at "+pct(rate)+". Gross-up: "+fm(gu)+". Issue R185."};}
   return{grossUp:amt,taxCredit:amt*rate,rate:rate,note:tType+": trustees pay "+pct(rate)+". Life tenant declares gross on SA."};
 }
-
 function calcCGT(trust){
   var gains=gga(),st=Number(trust.settlorTrusts||1),fullAEA=1500;
   var aea=st>=5?Math.max(300,fullAEA/st):fullAEA/st;
@@ -193,7 +346,6 @@ function calcCGT(trust){
   var net=Math.max(0,tg-tl),taxable=Math.max(0,net-aea),tax=taxable*0.24;
   return{tg:tg,tl:tl,net:net,aea:Math.round(aea*100)/100,taxable:taxable,tax:tax,lc:Math.max(0,tl-tg),st:st};
 }
-
 function calc10Y(trust){
   var val=Number(trust.currentValue||trust.initialValue||0),clts=Number(trust.settlorPriorCLTs||0);
   var avNRB=Math.max(0,NRB-clts);
@@ -202,7 +354,6 @@ function calc10Y(trust){
   var taxLife=excess*0.20,effRate=hyp>0?taxLife/hyp:0,perRate=effRate*0.3,taxDue=val*perRate;
   return{val:val,clts:clts,avNRB:avNRB,capDist:capDist,hyp:hyp,excess:excess,effRate:effRate,perRate:perRate,taxDue:taxDue,needsReturn:hyp>(NRB*0.8)};
 }
-
 function calcExit(trust,amt,date){
   var t=gt();if(!t||!t.established||!date)return null;
   var start=new Date(t.established),exit=new Date(date);
@@ -214,7 +365,6 @@ function calcExit(trust,amt,date){
   var tenY=calc10Y(trust),exitRate=tenY.perRate*(qtrs/40),tax=Number(amt)*exitRate;
   return{tax:tax,qtrs:qtrs,rate:exitRate,note:dec===0?"Pre-first-anniversary rate.":"Based on last 10-year effective rate."};
 }
-
 function gs(){
   var t=gt();if(!t)return null;
   var ds=gdi(),ic=gin(),ex=gex(),bs=gbe();
@@ -240,14 +390,12 @@ function gs(){
   kd.sort(function(a,b){return(a.du===null?9999:a.du)-(b.du===null?9999:b.du)});
   return{tD:tD,tI:tI,tE:tE,bal:bal,pb:pb,kd:kd};
 }
-
 function dpc(d){if(d<60)return"background:#fef2f2;color:#dc2626";if(d<180)return"background:#fffbeb;color:#d97706";return"background:#f0fdf4;color:#059669"}
 function dtc(tp){return{iht:"background:#faf5ff;color:#7c3aed",tax:"background:#fef2f2;color:#dc2626",compliance:"background:#fffbeb;color:#d97706",admin:"background:#eff6ff;color:#1e40af"}[tp]||"background:#eff6ff;color:#1e40af"}
 
 // ============================================================
 // CLOUD SYNC
 // ============================================================
-
 function syncStatusHTML(){
   if(syncStatus==='syncing')return'<span style="font-size:11px;color:rgba(255,255,255,0.5)">\u2191 saving</span>';
   if(syncStatus==='saved')return'<span style="font-size:11px;color:#4ade80">\u2713 saved</span>';
@@ -255,148 +403,66 @@ function syncStatusHTML(){
   if(syncStatus==='offline')return'<span style="font-size:11px;color:#fcd34d">offline</span>';
   return'';
 }
-
-// Build the trust document to upsert for one trust
 function buildTrustDoc(trustId){
   var trust=S.trusts.find(function(t){return t.id===trustId});
   if(!trust)return null;
-  return{
-    trust:trust,
-    beneficiaries:S.beneficiaries.filter(function(b){return b.trustId===trustId}),
-    trustees:S.trustees.filter(function(t){return t.trustId===trustId}),
-    distributions:S.distributions.filter(function(d){return d.trustId===trustId}),
-    decisions:S.decisions.filter(function(d){return d.trustId===trustId}),
-    income:S.income.filter(function(i){return i.trustId===trustId}),
-    expenses:S.expenses.filter(function(e){return e.trustId===trustId}),
-    gains:S.gains.filter(function(g){return g.trustId===trustId})
-  };
+  return{trust:trust,beneficiaries:S.beneficiaries.filter(function(b){return b.trustId===trustId}),trustees:S.trustees.filter(function(t){return t.trustId===trustId}),distributions:S.distributions.filter(function(d){return d.trustId===trustId}),decisions:S.decisions.filter(function(d){return d.trustId===trustId}),income:S.income.filter(function(i){return i.trustId===trustId}),expenses:S.expenses.filter(function(e){return e.trustId===trustId}),gains:S.gains.filter(function(g){return g.trustId===trustId})};
 }
-
 async function saveTrustToCloud(trustId){
   if(!currentUser||!sb||!trustId)return;
-  var doc=buildTrustDoc(trustId);
-  if(!doc)return;
-  var{error}=await sb.from('user_trusts').upsert({
-    trust_id:trustId,
-    user_id:currentUser.id,
-    trust_data:doc,
-    updated_at:new Date().toISOString()
-  },{onConflict:'trust_id'});
+  var doc=buildTrustDoc(trustId);if(!doc)return;
+  var{error}=await sb.from('user_trusts').upsert({trust_id:trustId,user_id:currentUser.id,trust_data:doc,updated_at:new Date().toISOString()},{onConflict:'trust_id'});
   if(error)throw error;
 }
-
 async function loadFromCloud(){
   if(!currentUser||!sb){R();return;}
-  var uid=currentUser.id;
-  syncStatus='syncing';
-
-  // One-time migration: push existing localStorage data up to cloud
+  var uid=currentUser.id;syncStatus='syncing';
   var migratedKey=SK+'-cloud-v1';
   if(!localStorage.getItem(migratedKey)){
     var cached=localStorage.getItem(SK);
-    if(cached){
-      try{
-        var p=JSON.parse(cached);
-        var tmp={trusts:[],beneficiaries:[],trustees:[],distributions:[],decisions:[],income:[],expenses:[],gains:[]};
-        Object.keys(tmp).forEach(function(k){if(p[k]&&p[k].length>0)tmp[k]=p[k];});
-        if(tmp.trusts.length>0){
-          var ops=tmp.trusts.map(function(t){
-            var doc={trust:t,beneficiaries:tmp.beneficiaries.filter(function(b){return b.trustId===t.id}),trustees:tmp.trustees.filter(function(tr){return tr.trustId===t.id}),distributions:tmp.distributions.filter(function(d){return d.trustId===t.id}),decisions:tmp.decisions.filter(function(d){return d.trustId===t.id}),income:tmp.income.filter(function(i){return i.trustId===t.id}),expenses:tmp.expenses.filter(function(e){return e.trustId===t.id}),gains:tmp.gains.filter(function(g){return g.trustId===t.id})};
-            return sb.from('user_trusts').upsert({trust_id:t.id,user_id:uid,trust_data:doc,updated_at:new Date().toISOString()},{onConflict:'trust_id'});
-          });
-          await Promise.all(ops);
-        }
-      }catch(e){console.warn('Migration error:',e);}
-    }
+    if(cached){try{var p=JSON.parse(cached);var tmp={trusts:[],beneficiaries:[],trustees:[],distributions:[],decisions:[],income:[],expenses:[],gains:[]};Object.keys(tmp).forEach(function(k){if(p[k]&&p[k].length>0)tmp[k]=p[k];});if(tmp.trusts.length>0){var ops=tmp.trusts.map(function(t){var doc={trust:t,beneficiaries:tmp.beneficiaries.filter(function(b){return b.trustId===t.id}),trustees:tmp.trustees.filter(function(tr){return tr.trustId===t.id}),distributions:tmp.distributions.filter(function(d){return d.trustId===t.id}),decisions:tmp.decisions.filter(function(d){return d.trustId===t.id}),income:tmp.income.filter(function(i){return i.trustId===t.id}),expenses:tmp.expenses.filter(function(e){return e.trustId===t.id}),gains:tmp.gains.filter(function(g){return g.trustId===t.id})};return sb.from('user_trusts').upsert({trust_id:t.id,user_id:uid,trust_data:doc,updated_at:new Date().toISOString()},{onConflict:'trust_id'});});await Promise.all(ops);}}catch(e){console.warn('Migration error:',e);}}
     localStorage.setItem(migratedKey,'1');
   }
-
   try{
     var{data,error}=await sb.from('user_trusts').select('trust_id,trust_data').eq('user_id',uid);
     if(error)throw error;
-
     S={trusts:[],beneficiaries:[],trustees:[],distributions:[],decisions:[],income:[],expenses:[],gains:[]};
-    if(data){
-      data.forEach(function(row){
-        var td=row.trust_data;
-        if(td.trust)S.trusts.push(td.trust);
-        if(td.beneficiaries)S.beneficiaries=S.beneficiaries.concat(td.beneficiaries);
-        if(td.trustees)S.trustees=S.trustees.concat(td.trustees);
-        if(td.distributions)S.distributions=S.distributions.concat(td.distributions);
-        if(td.decisions)S.decisions=S.decisions.concat(td.decisions);
-        if(td.income)S.income=S.income.concat(td.income);
-        if(td.expenses)S.expenses=S.expenses.concat(td.expenses);
-        if(td.gains)S.gains=S.gains.concat(td.gains);
-      });
-    }
+    if(data){data.forEach(function(row){var td=row.trust_data;if(td.trust)S.trusts.push(td.trust);if(td.beneficiaries)S.beneficiaries=S.beneficiaries.concat(td.beneficiaries);if(td.trustees)S.trustees=S.trustees.concat(td.trustees);if(td.distributions)S.distributions=S.distributions.concat(td.distributions);if(td.decisions)S.decisions=S.decisions.concat(td.decisions);if(td.income)S.income=S.income.concat(td.income);if(td.expenses)S.expenses=S.expenses.concat(td.expenses);if(td.gains)S.gains=S.gains.concat(td.gains);});}
     try{localStorage.setItem(SK,JSON.stringify(S));}catch(e){}
     syncStatus='saved';
     if(S.trusts.length>0&&!AT)AT=S.trusts[0].id;
   }catch(e){
-    console.warn('Cloud load failed, using localStorage:',e);
-    syncStatus='offline';
-    try{
-      var cached2=localStorage.getItem(SK);
-      if(cached2){var p2=JSON.parse(cached2);Object.keys(S).forEach(function(k){if(p2[k])S[k]=p2[k];});if(S.trusts.length>0)AT=S.trusts[0].id;}
-    }catch(e2){}
+    console.warn('Cloud load failed, using localStorage:',e);syncStatus='offline';
+    try{var cached2=localStorage.getItem(SK);if(cached2){var p2=JSON.parse(cached2);Object.keys(S).forEach(function(k){if(p2[k])S[k]=p2[k];});if(S.trusts.length>0)AT=S.trusts[0].id;}}catch(e2){}
   }
   R();
 }
-
-// sv() — save to localStorage immediately, sync active trust to cloud in background
 function sv(){
   try{localStorage.setItem(SK,JSON.stringify(S));}catch(e){}
   if(currentUser&&sb&&AT){
     syncStatus='syncing';
-    var el=document.getElementById('sync-status');
-    if(el)el.innerHTML=syncStatusHTML();
-    saveTrustToCloud(AT).then(function(){
-      syncStatus='saved';
-      var el2=document.getElementById('sync-status');
-      if(el2)el2.innerHTML=syncStatusHTML();
-    }).catch(function(e){
-      console.warn('Sync error:',e);
-      syncStatus='error';
-      var el3=document.getElementById('sync-status');
-      if(el3)el3.innerHTML=syncStatusHTML();
-    });
+    var el=document.getElementById('sync-status');if(el)el.innerHTML=syncStatusHTML();
+    saveTrustToCloud(AT).then(function(){syncStatus='saved';var el2=document.getElementById('sync-status');if(el2)el2.innerHTML=syncStatusHTML();}).catch(function(e){console.warn('Sync error:',e);syncStatus='error';var el3=document.getElementById('sync-status');if(el3)el3.innerHTML=syncStatusHTML();});
   }
 }
 
 // ============================================================
-// AUTH FUNCTIONS
+// AUTH
 // ============================================================
-
 window.sendMagicLink=async function(){
-  var emailEl=document.getElementById('auth-email');
-  var email=(emailEl?emailEl.value:'').trim();
-  if(!email)return;
-  authEmail=email;
-  var btn=document.getElementById('magic-btn');
-  if(btn){btn.disabled=true;btn.textContent='Sending...';}
-  try{
-    var res=await sb.auth.signInWithOtp({email:email,options:{emailRedirectTo:window.location.href}});
-    if(res.error)throw res.error;
-    authStep='sent';
-    R();
-  }catch(e){
-    if(btn){btn.disabled=false;btn.textContent='Send magic link';}
-    var errEl=document.getElementById('auth-err');
-    if(errEl){errEl.textContent=e.message||'Could not send email. Please try again.';errEl.style.display='block';}
-  }
+  var emailEl=document.getElementById('auth-email');var email=(emailEl?emailEl.value:'').trim();if(!email)return;
+  authEmail=email;var btn=document.getElementById('magic-btn');if(btn){btn.disabled=true;btn.textContent='Sending...';}
+  try{var res=await sb.auth.signInWithOtp({email:email,options:{emailRedirectTo:window.location.href}});if(res.error)throw res.error;authStep='sent';R();}
+  catch(e){if(btn){btn.disabled=false;btn.textContent='Send magic link';}var errEl=document.getElementById('auth-err');if(errEl){errEl.textContent=e.message||'Could not send email. Please try again.';errEl.style.display='block';}}
 };
-
 window.resetAuth=function(){authStep='form';authEmail='';R();};
-
 window.logout=async function(){
   if(sb)await sb.auth.signOut();
-  currentUser=null;
-  S={trusts:[],beneficiaries:[],trustees:[],distributions:[],decisions:[],income:[],expenses:[],gains:[]};
-  AT=null;CV='dashboard';MT=null;MD={};authStep='form';authEmail='';syncStatus='idle';
-  R();
+  currentUser=null;S={trusts:[],beneficiaries:[],trustees:[],distributions:[],decisions:[],income:[],expenses:[],gains:[]};
+  AT=null;CV='home';MT=null;MD={};authStep='form';authEmail='';syncStatus='idle';R();
 };
 
-// Auth state listener is wired in startApp() after Supabase loads
+// Auth state listener wired in startApp()
 
 // ============================================================
 // EVENT HANDLERS
@@ -405,18 +471,17 @@ window.om=function(type,id){MT=type;MD=id?findItem(type,id):{};R()};
 window.cm=function(){MT=null;MD={};R()};
 window.sv2=function(v){CV=v;R();window.scrollTo(0,0)};
 window.chgT=function(v){AT=v;CV="dashboard";R()};
+window.filterGuide=function(cat){GC=cat;R();window.scrollTo(0,0)};
+window.searchGuide=function(v){GQ=v;R()};
+window.toggleEntry=function(id){var b=document.getElementById('ge-body-'+id);var c=document.getElementById('ge-chev-'+id);if(b){b.classList.toggle('open');c&&c.classList.toggle('open');}};
 
 window.doCalcExit=function(){
-  var amt=document.getElementById("exit-amt").value;
-  var date=document.getElementById("exit-date").value;
-  var res=document.getElementById("exit-result");
-  var det=document.getElementById("exit-detail");
+  var amt=document.getElementById("exit-amt").value,date=document.getElementById("exit-date").value;
+  var res=document.getElementById("exit-result"),det=document.getElementById("exit-detail");
   if(!amt||!date){res.textContent=fm(0);det.textContent="";return}
   var t=gt();if(!t){res.textContent=fm(0);return}
-  var ec=calcExit(t,amt,date);
-  if(!ec){res.textContent=fm(0);det.textContent="";return}
-  res.textContent=fm(ec.tax);
-  res.style.color=ec.tax>0?"#dc2626":"#059669";
+  var ec=calcExit(t,amt,date);if(!ec){res.textContent=fm(0);det.textContent="";return}
+  res.textContent=fm(ec.tax);res.style.color=ec.tax>0?"#dc2626":"#059669";
   det.textContent=ec.note+" "+ec.qtrs+"/40 quarters. Rate: "+pct(ec.rate)+".";
 };
 
@@ -427,71 +492,50 @@ window.saveTrust=function(){
   var n=document.getElementById("m-name").value;if(!n)return;
   var o={id:MD.id||gid(),name:n,type:document.getElementById("m-type").value,established:document.getElementById("m-est").value||tdy(),initialValue:Number(document.getElementById("m-val").value||0),currentValue:Number(document.getElementById("m-curval").value||0),settlorPriorCLTs:Number(document.getElementById("m-clts").value||0),settlorTrusts:Number(document.getElementById("m-strust").value||1),notes:document.getElementById("m-notes").value};
   if(MD.id){S.trusts=S.trusts.map(function(v){return v.id===MD.id?o:v})}else{S.trusts.push(o)}
-  if(!AT)AT=o.id;
-  sv();cm();
+  if(!AT)AT=o.id;sv();cm();
 };
-
 window.saveBen=function(){
   var n=document.getElementById("m-name").value;if(!n)return;
   var o={id:MD.id||gid(),trustId:AT,name:n,relationship:document.getElementById("m-rel").value,dob:document.getElementById("m-dob").value,taxBand:document.getElementById("m-taxband").value||"basic",notes:document.getElementById("m-notes").value};
-  if(MD.id){S.beneficiaries=S.beneficiaries.map(function(v){return v.id===MD.id?o:v})}else{S.beneficiaries.push(o)}
-  sv();cm();
+  if(MD.id){S.beneficiaries=S.beneficiaries.map(function(v){return v.id===MD.id?o:v})}else{S.beneficiaries.push(o)}sv();cm();
 };
-
 window.saveTru=function(){
   var n=document.getElementById("m-name").value;if(!n)return;
   var o={id:MD.id||gid(),trustId:AT,name:n,role:document.getElementById("m-role").value,appointedDate:document.getElementById("m-date").value||tdy(),professional:document.getElementById("m-pro").checked};
-  if(MD.id){S.trustees=S.trustees.map(function(v){return v.id===MD.id?o:v})}else{S.trustees.push(o)}
-  sv();cm();
+  if(MD.id){S.trustees=S.trustees.map(function(v){return v.id===MD.id?o:v})}else{S.trustees.push(o)}sv();cm();
 };
-
 window.saveDist=function(){
-  var ben=document.getElementById("m-ben").value;var amt=document.getElementById("m-amt").value;if(!ben||!amt)return;
+  var ben=document.getElementById("m-ben").value,amt=document.getElementById("m-amt").value;if(!ben||!amt)return;
   var o={id:MD.id||gid(),trustId:AT,beneficiaryId:ben,amount:Number(amt),date:document.getElementById("m-date").value||tdy(),distType:document.getElementById("m-dtype").value,reason:document.getElementById("m-rsn").value,approvedBy:document.getElementById("m-appr").value,method:document.getElementById("m-meth").value};
-  if(MD.id){S.distributions=S.distributions.map(function(v){return v.id===MD.id?o:v})}else{S.distributions.push(o)}
-  sv();cm();
+  if(MD.id){S.distributions=S.distributions.map(function(v){return v.id===MD.id?o:v})}else{S.distributions.push(o)}sv();cm();
 };
-
 window.saveDec=function(){
   var title=document.getElementById("m-title").value;if(!title)return;
   var o={id:MD.id||gid(),trustId:AT,title:title,reasoning:document.getElementById("m-rsng").value,date:document.getElementById("m-date").value||tdy(),category:document.getElementById("m-cat").value,attendees:document.getElementById("m-att").value};
-  if(MD.id){S.decisions=S.decisions.map(function(v){return v.id===MD.id?o:v})}else{S.decisions.push(o)}
-  sv();cm();
+  if(MD.id){S.decisions=S.decisions.map(function(v){return v.id===MD.id?o:v})}else{S.decisions.push(o)}sv();cm();
 };
-
 window.saveInc=function(){
   var amt=document.getElementById("m-amt").value;if(!amt)return;
   var o={id:MD.id||gid(),trustId:AT,amount:Number(amt),date:document.getElementById("m-date").value||tdy(),source:document.getElementById("m-src").value,type:document.getElementById("m-type").value};
-  if(MD.id){S.income=S.income.map(function(v){return v.id===MD.id?o:v})}else{S.income.push(o)}
-  sv();cm();
+  if(MD.id){S.income=S.income.map(function(v){return v.id===MD.id?o:v})}else{S.income.push(o)}sv();cm();
 };
-
 window.saveExp=function(){
   var amt=document.getElementById("m-amt").value;if(!amt)return;
   var o={id:MD.id||gid(),trustId:AT,amount:Number(amt),date:document.getElementById("m-date").value||tdy(),description:document.getElementById("m-desc").value,category:document.getElementById("m-cat").value};
-  if(MD.id){S.expenses=S.expenses.map(function(v){return v.id===MD.id?o:v})}else{S.expenses.push(o)}
-  sv();cm();
+  if(MD.id){S.expenses=S.expenses.map(function(v){return v.id===MD.id?o:v})}else{S.expenses.push(o)}sv();cm();
 };
-
 window.saveGain=function(){
   var amt=document.getElementById("m-amt").value;if(!amt)return;
   var o={id:MD.id||gid(),trustId:AT,amount:Number(amt),date:document.getElementById("m-date").value||tdy(),asset:document.getElementById("m-asset").value,isResidential:document.getElementById("m-res").checked};
-  if(MD.id){S.gains=S.gains.map(function(v){return v.id===MD.id?o:v})}else{S.gains.push(o)}
-  sv();cm();
+  if(MD.id){S.gains=S.gains.map(function(v){return v.id===MD.id?o:v})}else{S.gains.push(o)}sv();cm();
 };
-
-// Modified delItem — removes from S, updates localStorage, and explicitly deletes from cloud
 window.delItem=function(type,id){
   var map={trust:"trusts",beneficiary:"beneficiaries",trustee:"trustees",distribution:"distributions",decision:"decisions",income:"income",expense:"expenses",gain:"gains"};
   var key=map[type];if(!key)return;
   S[key]=S[key].filter(function(v){return v.id!==id});
   if(type==="trust"){AT=S.trusts.length>0?S.trusts[0].id:null}
   sv();
-  // Explicitly delete trust document from cloud (sv() upserts but doesn't delete)
-  if(type==="trust"&&currentUser&&sb){
-    sb.from('user_trusts').delete().eq('trust_id',id).eq('user_id',currentUser.id)
-      .then(function(){}).catch(function(e){console.warn('Cloud delete error:',e);});
-  }
+  if(type==="trust"&&currentUser&&sb){sb.from('user_trusts').delete().eq('trust_id',id).eq('user_id',currentUser.id).then(function(){}).catch(function(e){console.warn('Cloud delete error:',e);});}
   cm();
 };
 
@@ -501,178 +545,249 @@ window.delItem=function(type,id){
 function R(){
   var app=document.getElementById("app");
   var t=gt();
+  var ob=obSteps();
+  var showHome=CV==='home'||(CV==='dashboard'&&!t);
   var h="";
 
-  // Header
+  // HEADER
   h+='<div class="header"><div><h1>Trust Manager</h1><div class="header-sub">UK TAX LAW \u00B7 2025/26</div></div>';
   h+='<div class="header-actions">';
-
-  // Sync status (only when logged in)
   if(sbConfigured&&currentUser){
     h+='<span id="sync-status">'+syncStatusHTML()+'</span>';
     h+='<span style="font-size:10px;color:rgba(255,255,255,0.45);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(currentUser.email)+'</span>';
   }
-
-  // Trust selector
   if(S.trusts.length>0){
     h+='<select onchange="chgT(this.value)">';
     S.trusts.forEach(function(tr){h+='<option value="'+esc(tr.id)+'"'+(tr.id===AT?" selected":"")+'>'+esc(tr.name)+'</option>'});
     h+='</select>';
   }
-
   h+='<button class="btn-header" onclick="om(\'trust\')">+ New Trust</button>';
-
-  if(sbConfigured&&currentUser){
-    h+='<button class="btn-header" onclick="logout()" style="background:rgba(255,255,255,0.07)">Log out</button>';
-  }
-
+  if(sbConfigured&&currentUser)h+='<button class="btn-header" onclick="logout()" style="background:rgba(255,255,255,0.07)">Log out</button>';
   h+='</div></div>';
 
-  // Setup banner (Supabase not configured — app still works with localStorage)
-  if(!sbConfigured){
-    h+='<div style="background:#854d0e;padding:10px 20px;font-size:12px;color:#fef9c3;display:flex;align-items:center;gap:10px">';
-    h+='<span style="font-weight:700">Local mode</span>';
-    h+='<span>Data is stored in this browser only. Add your Supabase credentials to enable cloud sync + accounts.</span>';
+  // LOCAL MODE BANNER
+  if(!sbConfigured)h+='<div style="background:#854d0e;padding:10px 20px;font-size:12px;color:#fef9c3;display:flex;align-items:center;gap:10px"><span style="font-weight:700">Local mode</span><span>Data is stored in this browser only. Add your Supabase credentials to enable cloud sync.</span></div>';
+
+  // SETUP INCOMPLETE BANNER (when trust exists but next step outstanding — not on home tab)
+  if(t&&CV!=='home'&&CV!=='guide'&&ob.next>0&&ob.next<4){
+    var ns=ob.steps[ob.next];
+    h+='<div style="background:#1e40af;padding:10px 20px;font-size:12px;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">';
+    h+='<span>\u25B6 Next: <strong>Step '+(ob.next+1)+'</strong> — '+esc(ns.title)+'</span>';
+    h+='<button onclick="sv2(\'home\')" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer;font-weight:600">View setup guide</button>';
     h+='</div>';
   }
 
-  if(!t){
-    h+='<div class="empty"><div style="font-size:42px;margin-bottom:14px">\u2696</div><h2 style="font-size:22px;margin-bottom:8px">Trust Manager</h2><p style="color:#64748b;font-size:14px;line-height:1.7;max-width:420px;margin:0 auto 20px">Manage distributions, track decisions, calculate tax. Built with 2025/26 UK trust tax law.</p><button class="btn btn-primary" onclick="om(\'trust\')">Set Up Your First Trust</button></div>';
-  } else {
-    // Tabs
+  // TABS (shown when trust exists)
+  if(t){
     h+='<div class="tabs">';
-    [["dashboard","Overview"],["distributions","Distributions"],["tax","Tax Centre"],["decisions","Decisions"],["accounts","Accounts"],["people","People"],["dates","Compliance"]].forEach(function(tb){h+='<button class="tab'+(CV===tb[0]?" active":"")+'" onclick="sv2(\''+tb[0]+'\')">'+tb[1]+'</button>'});
-    h+='</div><div class="content">';
-    var st=gs();
+    [["home","Setup"],["dashboard","Overview"],["distributions","Distributions"],["tax","Tax Centre"],["decisions","Decisions"],["accounts","Accounts"],["people","People"],["dates","Compliance"],["guide","Guide"]].forEach(function(tb){
+      h+='<button class="tab'+(CV===tb[0]?" active":"")+'" onclick="sv2(\''+tb[0]+'\')">'+tb[1]+'</button>';
+    });
+    h+='</div>';
+  }
 
-    // DASHBOARD
-    if(CV==="dashboard"&&st){
-      h+='<div class="card" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><div><h2 style="font-size:20px">'+esc(t.name)+'</h2><div style="font-size:13px;color:#64748b;margin-top:4px">'+esc(t.type)+' Trust \u00B7 Est. '+fd(t.established)+'</div></div><button class="btn btn-ghost btn-sm" onclick="om(\'trust\',\''+esc(t.id)+'\')">Edit</button></div>';
-      h+='<div class="kpi-grid">';
-      [{l:"Current Value",v:fm(t.currentValue||t.initialValue||0),c:"#1e293b"},{l:"Distributed",v:fm(st.tD),c:"#64748b"},{l:"Income",v:fm(st.tI),c:"#059669"},{l:"Expenses",v:fm(st.tE),c:"#d97706"}].forEach(function(k){h+='<div class="card"><div class="kl">'+k.l+'</div><div class="kv" style="color:'+k.c+'">'+k.v+'</div></div>'});
-      h+='</div>';
-      var cgt=calcCGT(t),iht=calc10Y(t);
-      h+='<div class="kl" style="margin-bottom:10px">TAX SNAPSHOT</div><div class="two-col">';
-      h+='<div class="card"><div class="kl">CGT Position</div><div style="font-size:16px;font-weight:700;color:'+(cgt.tax>0?"#dc2626":"#059669")+'">'+fm(cgt.tax)+' due</div><div style="font-size:11px;color:#64748b;margin-top:4px">AEA: '+fm(cgt.aea)+' \u00B7 Net gains: '+fm(cgt.net)+'</div></div>';
-      h+='<div class="card"><div class="kl">Est. 10-Year Charge</div><div style="font-size:16px;font-weight:700;color:'+(iht.taxDue>0?"#dc2626":"#059669")+'">'+fm(iht.taxDue)+'</div><div style="font-size:11px;color:#64748b;margin-top:4px">Rate: '+pct(iht.perRate)+' \u00B7 Avail NRB: '+fmi(iht.avNRB)+'</div></div>';
-      h+='</div>';
-      if(st.kd.length>0){
-        h+='<div class="kl" style="margin:16px 0 10px">NEXT DEADLINES</div>';
-        st.kd.slice(0,4).forEach(function(d){if(d.du===null||d.du>0)h+='<div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:14px 20px"><div><div style="font-size:13px;font-weight:600">'+esc(d.label)+'</div><div style="font-size:11px;color:#64748b">'+(d.date?fd(d.date):"Ongoing")+'</div></div>'+(d.du!==null?'<span style="font-size:11px;padding:3px 10px;border-radius:10px;font-weight:600;'+dpc(d.du)+'">'+d.du+'d</span>':'')+'</div>'});
-      }
+  h+='<div class="content">';
+
+  // ============================================================
+  // HOME / ONBOARDING
+  // ============================================================
+  if(showHome||CV==='home'){
+    // About box
+    h+='<div class="about-box">';
+    h+='<h2>You\'ve been appointed as a trustee.</h2>';
+    h+='<p>Trust Manager helps you fulfil your legal obligations without needing a solicitor on call. It keeps a record of every distribution, every decision, and every compliance deadline — so you\'re protected if your actions are ever questioned.</p>';
+    h+='<p style="margin-top:10px">It also calculates the UK tax position as you go: income tax on distributions, the 10-year IHT periodic charge, exit charges, and CGT — all based on current 2025/26 rules. You still need an accountant to file your SA900, but this gives you everything they\'ll need.</p>';
+    h+='<div class="ab-tags"><span class="ab-tag">Discretionary trusts</span><span class="ab-tag">Will trusts</span><span class="ab-tag">IIP trusts</span><span class="ab-tag">Bare trusts</span><span class="ab-tag">2025/26 UK tax law</span></div>';
+    h+='</div>';
+
+    // Progress summary
+    var doneCt=ob.steps.filter(function(s){return s.done}).length;
+    var pct2=Math.round(doneCt/(ob.steps.length-1)*100); // step 5 is ongoing so exclude
+    if(t){
+      h+='<div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-size:11px;font-weight:700;letter-spacing:1px;color:#64748b;text-transform:uppercase">Setup progress</div><div style="font-size:11px;color:#64748b">'+doneCt+' of 4 steps complete</div></div>';
+      h+='<div style="height:5px;background:#e5e1dc;border-radius:3px;overflow:hidden"><div style="height:100%;width:'+pct2+'%;background:#059669;border-radius:3px;transition:width .3s"></div></div></div>';
     }
 
-    // DISTRIBUTIONS
-    if(CV==="distributions"){
-      h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="font-size:20px">Distributions</h2><button class="btn btn-accent btn-sm" onclick="om(\'distribution\')">+ Record</button></div>';
-      h+='<div class="info"><div class="info-t">Tax on Distributions ('+esc(t.type)+')</div><div class="info-b">'+(t.type==="Discretionary"?"Income carries 45% tax credit (39.35% dividends). Issue R185 to beneficiaries.":t.type==="Bare"?"Trust is transparent. Beneficiary taxed at own rates.":"Trustees pay basic rate. Life tenant declares gross on Self Assessment.")+'</div></div>';
-      var ds=gdi();
-      if(ds.length===0){h+='<div class="card empty" style="padding:40px">No distributions recorded.</div>';}
-      else ds.forEach(function(d){
-        var tc=calcDistTax(d,t);
-        h+='<div class="card card-click" onclick="om(\'distribution\',\''+esc(d.id)+'\')"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap"><span style="font-weight:700;font-size:15px">'+fm(d.amount)+'</span><span style="font-size:12px;color:#64748b">to</span><span style="font-weight:600;color:#1e40af">'+esc(bna(d.beneficiaryId))+'</span><span class="badge" style="background:#f0fdf4;color:#059669">'+esc(d.distType||"Income")+'</span></div>';
-        if(tc.taxCredit>0)h+='<div style="font-size:12px;color:#7c3aed;margin-bottom:4px">Tax credit: '+fm(tc.taxCredit)+' \u00B7 Gross: '+fm(tc.grossUp)+'</div>';
-        if(d.distType==="Capital"){var ec=calcExit(t,d.amount,d.date);if(ec&&ec.tax>0)h+='<div style="font-size:12px;color:#dc2626;margin-bottom:4px">Est. exit charge: '+fm(ec.tax)+' ('+ec.qtrs+'/40 qtrs)</div>';}
-        h+='<div style="font-size:12px;color:#64748b">'+fd(d.date)+(d.method?' \u00B7 '+esc(d.method):'')+(d.reason?' \u00B7 '+esc(d.reason):'')+'</div></div>';
+    // Steps
+    h+='<div style="font-size:11px;font-weight:700;letter-spacing:1px;color:#64748b;text-transform:uppercase;margin-bottom:10px">Your setup checklist</div>';
+    ob.steps.forEach(function(step,i){
+      var isDone=step.done;
+      var isActive=!isDone&&(i===0||ob.steps[i-1].done);
+      var isPending=!isDone&&!isActive;
+      var cls='ob-step '+(isDone?'done-step':isActive?'active-step':'pending-step');
+      var numCls=isDone?'done':isActive?'active':'pending';
+      var onclick=isPending?'':'onclick="'+( i===0?"om('trust')":'sv2(\''+(['','people','accounts','decisions','dates'][i])+'\')')+'"';
+      h+='<div class="'+cls+'" '+onclick+'>';
+      h+='<div class="ob-num '+numCls+'">'+(isDone?'&#10003;':step.n)+'</div>';
+      h+='<div class="ob-body">';
+      h+='<div class="ob-title">'+esc(step.title)+'</div>';
+      h+='<div class="ob-desc">'+esc(step.desc)+'</div>';
+      if(isActive)h+='<div class="ob-cta">'+esc(step.cta)+' \u2192</div>';
+      h+='</div>';
+      if(isDone)h+='<div class="ob-tick" style="color:#059669">&#10003;</div>';
+      if(isActive)h+='<div class="ob-tick" style="color:#1e40af">\u2192</div>';
+      h+='</div>';
+    });
+
+    h+='<div class="warn" style="margin-top:20px"><div class="wt">You are personally responsible</div><div class="wb">As a trustee you have legal duties under the Trustee Act 2000. Mistakes can make you personally liable to beneficiaries for any loss caused. This app helps you keep records and understand your obligations — but it does not replace professional advice. Always consult a solicitor or accountant for significant decisions.</div></div>';
+
+    if(!t){
+      h+='<div style="text-align:center;margin-top:24px"><button class="btn btn-primary" onclick="om(\'trust\')" style="padding:14px 32px;font-size:15px">Get started — set up your first trust</button></div>';
+    }
+  }
+
+  // ============================================================
+  // GUIDE
+  // ============================================================
+  else if(CV==='guide'){
+    h+='<h2 style="font-size:20px;margin-bottom:4px">Trustee\'s Guide</h2>';
+    h+='<p style="font-size:13px;color:#64748b;margin-bottom:16px">Plain English explanations of every term, tax, and obligation you need to know.</p>';
+    h+='<input class="guide-search" type="text" placeholder="Search — e.g. R185, exit charge, settlor..." value="'+esc(GQ)+'" oninput="searchGuide(this.value)">';
+    h+='<div class="gcats">';
+    [{v:'all',l:'All'},{v:'trust-types',l:'Trust types'},{v:'tax',l:'Tax'},{v:'compliance',l:'Compliance'},{v:'distributions',l:'Distributions'},{v:'people',l:'People'}].forEach(function(c){
+      h+='<button class="gcat'+(GC===c.v?' active':'')+'" onclick="filterGuide(\''+c.v+'\')">'+c.l+'</button>';
+    });
+    h+='</div>';
+
+    var catLabels={'trust-types':'Trust types','tax':'Tax','compliance':'Compliance & reporting','distributions':'Distributions','people':'People'};
+    var catOrder=['trust-types','people','tax','distributions','compliance'];
+    var q=GQ.toLowerCase().trim();
+
+    var filtered=GD.filter(function(e){
+      if(GC!=='all'&&e.cat!==GC)return false;
+      if(q){var search=(e.title+' '+e.summary+' '+e.body+' '+(e.example||'')).toLowerCase();return search.indexOf(q)!==-1;}
+      return true;
+    });
+
+    if(filtered.length===0){
+      h+='<div class="guide-empty">No entries match "'+esc(GQ)+'".<br>Try a different search term.</div>';
+    } else if(q||GC!=='all'){
+      filtered.forEach(function(e){h+=guideEntry(e);});
+    } else {
+      catOrder.forEach(function(cat){
+        var items=filtered.filter(function(e){return e.cat===cat});
+        if(items.length===0)return;
+        h+='<div class="cat-header">'+esc(catLabels[cat]||cat)+'</div>';
+        items.forEach(function(e){h+=guideEntry(e);});
       });
     }
-
-    // TAX CENTRE
-    if(CV==="tax"){
-      h+='<h2 style="font-size:20px;margin-bottom:16px">Tax Centre</h2>';
-      var cgt2=calcCGT(t);
-      h+='<div class="kl" style="margin-bottom:10px">CAPITAL GAINS TAX 2025/26</div>';
-      h+='<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div style="font-size:16px;font-weight:700">CGT Summary</div><button class="btn btn-accent btn-sm" onclick="om(\'gain\')">+ Gain/Loss</button></div>';
-      h+='<div style="font-size:11px;color:#64748b;margin-bottom:10px">AEA: '+fm(cgt2.aea)+' (\u00A31,500 shared across '+cgt2.st+' trust'+(cgt2.st>1?'s':'')+')</div>';
-      [["Total gains",fm(cgt2.tg)],["Total losses","-"+fm(cgt2.tl),"#dc2626"],["Net gains",fm(cgt2.net)],["AEA used","-"+fm(Math.min(cgt2.net,cgt2.aea)),"#059669"],["Taxable gain",fm(cgt2.taxable)],["CGT @ 24%",fm(cgt2.tax),cgt2.tax>0?"#dc2626":"#059669"]].forEach(function(r){h+='<div class="tax-row"><span>'+r[0]+'</span><span'+(r[2]?' style="color:'+r[2]+'"':'')+'>'+r[1]+'</span></div>'});
-      if(cgt2.lc>0)h+='<div class="tax-row"><span>Losses carried forward</span><span>'+fm(cgt2.lc)+'</span></div>';
-      h+='</div>';
-      var gains2=gga();
-      if(gains2.length>0){gains2.sort(function(a,b){return new Date(b.date)-new Date(a.date)}).forEach(function(g){h+='<div class="card card-click" onclick="om(\'gain\',\''+esc(g.id)+'\')"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:600;font-size:13px">'+esc(g.asset||"Unnamed")+'</div><div style="font-size:11px;color:#64748b">'+fd(g.date)+(g.isResidential?' \u00B7 Residential':'')+'</div></div><div style="font-weight:700;color:'+(Number(g.amount)>=0?"#1e293b":"#dc2626")+'">'+fm(g.amount)+'</div></div></div>'});}
-      var iht2=calc10Y(t);
-      h+='<div class="kl" style="margin:20px 0 10px">INHERITANCE TAX \u00B7 10-YEAR CHARGE</div>';
-      h+='<div class="'+(iht2.taxDue>0?'tax-result warning':'tax-result')+'"><div class="tr-label">'+(iht2.taxDue>0?'ESTIMATED TAX DUE':'NO TAX DUE')+'</div><div class="tr-value">'+fm(iht2.taxDue)+'</div></div>';
-      h+='<div class="card">';
-      [["Trust value",fm(iht2.val)],["Capital distributions in period",fm(iht2.capDist)],["Hypothetical transfer",fm(iht2.hyp)],["Settlor prior CLTs",fm(iht2.clts)],["Available NRB",fmi(iht2.avNRB)],["Excess over NRB",fm(iht2.excess)],["Effective rate (3/10 of lifetime)",pct(iht2.perRate)],["Tax due",fm(iht2.taxDue)]].forEach(function(r){h+='<div class="tax-row"><span>'+r[0]+'</span><span>'+r[1]+'</span></div>'});
-      h+='</div>';
-      h+='<div class="info"><div class="info-t">'+(iht2.needsReturn?'IHT Return Required':'No Return Needed')+'</div><div class="info-b">'+(iht2.needsReturn?'Value exceeds 80% of NRB ('+fmi(NRB*0.8)+'). File IHT100 within 6 months of anniversary.':'Below 80% NRB threshold. No filing needed.')+'</div></div>';
-      h+='<div class="kl" style="margin:20px 0 10px">EXIT CHARGE CALCULATOR</div>';
-      h+='<div class="card"><div style="font-size:13px;color:#64748b;line-height:1.6;margin-bottom:12px">Pro-rated charge when capital leaves. Rate: '+pct(iht2.perRate)+' \u00D7 (quarters/40).</div>';
-      h+='<div class="g3"><div class="fg"><label class="label">Amount leaving</label><input class="input" id="exit-amt" type="number" step="0.01" oninput="doCalcExit()"></div><div class="fg"><label class="label">Date</label><input class="input" id="exit-date" type="date" value="'+tdy()+'" oninput="doCalcExit()"></div><div class="fg"><label class="label">Est. charge</label><div id="exit-result" style="padding:10px 14px;background:#faf9f7;border-radius:8px;font-weight:700;font-size:16px;min-height:42px;display:flex;align-items:center">'+fm(0)+'</div></div></div>';
-      h+='<div id="exit-detail" style="font-size:12px;color:#64748b;margin-top:4px"></div></div>';
-      h+='<div class="warn"><div class="wt">Disclaimer</div><div class="wb">These are estimates based on simplified calculations. Actual tax depends on full circumstances. Always verify with a qualified trust adviser.</div></div>';
-    }
-
-    // DECISIONS
-    if(CV==="decisions"){
-      h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div><h2 style="font-size:20px">Decision Log</h2><p style="font-size:12px;color:#64748b;margin-top:4px">Trustee Act 2000 safeguard.</p></div><button class="btn btn-accent btn-sm" onclick="om(\'decision\')">+ Log</button></div>';
-      var dcs=gdc();
-      if(dcs.length===0){h+='<div class="card empty" style="padding:40px">No decisions logged.</div>';}
-      else dcs.forEach(function(d){h+='<div class="card card-click" onclick="om(\'decision\',\''+esc(d.id)+'\')"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge" style="background:#f0fdf4;color:#059669">'+esc(d.category)+'</span><span style="font-size:12px;color:#64748b">'+fd(d.date)+'</span></div><div style="font-weight:700;font-size:14px;margin-bottom:4px">'+esc(d.title)+'</div><div style="font-size:13px;color:#57534e;line-height:1.6;white-space:pre-wrap">'+esc(d.reasoning)+'</div>'+(d.attendees?'<div style="font-size:11px;color:#64748b;margin-top:8px">Present: '+esc(d.attendees)+'</div>':'')+'</div>'});
-    }
-
-    // ACCOUNTS
-    if(CV==="accounts"){
-      h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="font-size:20px">Trust Accounts</h2><div style="display:flex;gap:8px"><button class="btn btn-accent btn-sm" onclick="om(\'income\')">+ Income</button><button class="btn btn-ghost btn-sm" onclick="om(\'expense\')">+ Expense</button></div></div>';
-      h+='<div class="card" style="margin-bottom:14px"><div class="g4" style="text-align:center">';
-      h+='<div><div class="kl">Opening</div><div style="font-size:18px;font-weight:700">'+fm(t.initialValue||0)+'</div></div>';
-      h+='<div><div class="kl">+ Income</div><div style="font-size:18px;font-weight:700;color:#059669">'+fm(st?st.tI:0)+'</div></div>';
-      h+='<div><div class="kl">- Outflows</div><div style="font-size:18px;font-weight:700;color:#dc2626">'+fm((st?st.tD:0)+(st?st.tE:0))+'</div></div>';
-      h+='<div><div class="kl">= Balance</div><div style="font-size:18px;font-weight:700;color:#1e40af">'+fm(st?st.bal:0)+'</div></div>';
-      h+='</div></div>';
-      var ax=[].concat(gin().map(function(i){return{date:i.date,txType:"income",amount:i.amount,label:i.source||i.type}})).concat(gex().map(function(e){return{date:e.date,txType:"expense",amount:e.amount,label:e.description||e.category}})).concat(gdi().map(function(d){return{date:d.date,txType:"distribution",amount:d.amount,label:"Distribution to "+bna(d.beneficiaryId)}})).sort(function(a,b){return new Date(b.date)-new Date(a.date)});
-      h+='<div class="card"><div class="kl" style="margin-bottom:12px">ALL TRANSACTIONS</div>';
-      if(ax.length===0)h+='<div style="padding:20px;text-align:center;color:#64748b;font-size:13px">No transactions</div>';
-      else ax.forEach(function(tx){h+='<div style="padding:12px 0;border-bottom:1px solid #e5e1dc;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600">'+esc(tx.label)+'</div><div style="font-size:11px;color:#64748b;margin-top:2px">'+fd(tx.date)+' \u00B7 '+tx.txType+'</div></div><div style="font-weight:700;color:'+(tx.txType==="income"?"#059669":"#dc2626")+'">'+(tx.txType==="income"?"+":"\u2212")+fm(tx.amount)+'</div></div>'});
-      h+='</div>';
-    }
-
-    // PEOPLE
-    if(CV==="people"){
-      h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="font-size:20px">Beneficiaries</h2><button class="btn btn-accent btn-sm" onclick="om(\'beneficiary\')">+ Add</button></div>';
-      var bs=gbe();
-      if(bs.length===0)h+='<div class="card" style="text-align:center;color:#64748b;margin-bottom:28px">No beneficiaries</div>';
-      else{
-        bs.forEach(function(b,i){
-          var rc=st?((st.pb.find(function(v){return v.id===b.id})||{}).total||0):0;
-          h+='<div class="card card-click" onclick="om(\'beneficiary\',\''+esc(b.id)+'\')"><div style="display:flex;justify-content:space-between;align-items:center"><div style="display:flex;align-items:center;gap:12px"><div style="width:36px;height:36px;border-radius:20px;background:'+CO[i%CO.length]+'22;color:'+CO[i%CO.length]+';display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">'+esc(b.name.charAt(0))+'</div><div><div style="font-weight:700;font-size:14px">'+esc(b.name)+(b.taxBand?' <span class="badge" style="background:#eff6ff;color:#1e40af">'+esc(b.taxBand)+'</span>':'')+'</div><div style="font-size:12px;color:#64748b">'+esc(b.relationship||"")+(b.dob?' \u00B7 '+fd(b.dob):'')+'</div></div></div><div style="text-align:right"><div style="font-weight:700">'+fm(rc)+'</div><div style="font-size:11px;color:#64748b">received</div></div></div></div>';
-        });
-        h+='<div style="margin-bottom:28px"></div>';
-      }
-      h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="font-size:20px">Trustees</h2><button class="btn btn-accent btn-sm" onclick="om(\'trustee\')">+ Add</button></div>';
-      var ts=gtr();
-      if(ts.length===0)h+='<div class="card" style="text-align:center;color:#64748b">No trustees</div>';
-      else ts.forEach(function(tr){h+='<div class="card card-click" onclick="om(\'trustee\',\''+esc(tr.id)+'\')"><div style="font-weight:700;font-size:14px">'+esc(tr.name)+(tr.professional?' <span class="badge" style="background:#eff6ff;color:#1e40af">Professional</span>':'')+'</div><div style="font-size:12px;color:#64748b">'+esc(tr.role)+' \u00B7 Appointed '+fd(tr.appointedDate)+'</div></div>'});
-    }
-
-    // COMPLIANCE
-    if(CV==="dates"){
-      h+='<h2 style="font-size:20px;margin-bottom:4px">Compliance Calendar</h2><p style="font-size:13px;color:#64748b;margin-bottom:18px">'+esc(t.name)+'</p>';
-      if(st)st.kd.forEach(function(d){h+='<div class="card" style="display:flex;justify-content:space-between;align-items:center"><div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px"><span class="badge" style="'+dtc(d.type)+'">'+esc(d.type)+'</span><span style="font-weight:700;font-size:14px">'+esc(d.label)+'</span></div><div style="font-size:12px;color:#64748b">'+(d.date?fd(d.date):"Ongoing")+'</div></div>'+(d.du!==null?'<div style="text-align:right;min-width:60px"><div style="font-size:20px;font-weight:700;color:'+(d.du<60?"#dc2626":d.du<180?"#d97706":"#059669")+'">'+d.du+'d</div><div style="font-size:10px;color:#64748b">left</div></div>':'')+'</div>'});
-      h+='<div class="warn"><div class="wt">Trustee Obligations</div><div class="wb">\u2022 File SA900 annually (paper 31 Oct / electronic 31 Jan)<br>\u2022 Register + update TRS within 90 days of changes<br>\u2022 Issue R185 to beneficiaries each tax year<br>\u2022 File IHT100 within 6 months of 10-year anniversary<br>\u2022 Report CGT on residential property within 60 days<br>\u2022 Keep records of all transactions and decisions<br>\u2022 Act in beneficiaries\' best interests (Trustee Act 2000)<br>\u2022 Review investments prudently</div></div>';
-    }
-
-    h+='</div>'; // end .content
   }
 
-  // App-level modals (edit/add forms)
-  if(MT){
-    h+='<div class="modal-bg" onclick="cm()"><div class="modal" onclick="event.stopPropagation()"><div class="mh"><h3>'+modalTitle()+'</h3><button class="mc" onclick="cm()">\u00D7</button></div>'+modalBody()+'</div></div>';
+  // ============================================================
+  // DASHBOARD
+  // ============================================================
+  else if(CV==="dashboard"&&t){
+    var st=gs();
+    h+='<div class="card" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><div><h2 style="font-size:20px">'+esc(t.name)+'</h2><div style="font-size:13px;color:#64748b;margin-top:4px">'+esc(t.type)+' Trust \u00B7 Est. '+fd(t.established)+'</div></div><button class="btn btn-ghost btn-sm" onclick="om(\'trust\',\''+esc(t.id)+'\')">Edit</button></div>';
+    h+='<div class="kpi-grid">';
+    [{l:"Current Value",v:fm(t.currentValue||t.initialValue||0),c:"#1e293b"},{l:"Distributed",v:fm(st.tD),c:"#64748b"},{l:"Income",v:fm(st.tI),c:"#059669"},{l:"Expenses",v:fm(st.tE),c:"#d97706"}].forEach(function(k){h+='<div class="card"><div class="kl">'+k.l+'</div><div class="kv" style="color:'+k.c+'">'+k.v+'</div></div>'});
+    h+='</div>';
+    var cgt=calcCGT(t),iht=calc10Y(t);
+    h+='<div class="kl" style="margin-bottom:10px">TAX SNAPSHOT</div><div class="two-col">';
+    h+='<div class="card"><div class="kl">CGT Position</div><div style="font-size:16px;font-weight:700;color:'+(cgt.tax>0?"#dc2626":"#059669")+'">'+fm(cgt.tax)+' due</div><div style="font-size:11px;color:#64748b;margin-top:4px">AEA: '+fm(cgt.aea)+' \u00B7 Net gains: '+fm(cgt.net)+'</div></div>';
+    h+='<div class="card"><div class="kl">Est. 10-Year Charge</div><div style="font-size:16px;font-weight:700;color:'+(iht.taxDue>0?"#dc2626":"#059669")+'">'+fm(iht.taxDue)+'</div><div style="font-size:11px;color:#64748b;margin-top:4px">Rate: '+pct(iht.perRate)+' \u00B7 Avail NRB: '+fmi(iht.avNRB)+'</div></div>';
+    h+='</div>';
+    if(st.kd.length>0){h+='<div class="kl" style="margin:16px 0 10px">NEXT DEADLINES</div>';st.kd.slice(0,4).forEach(function(d){if(d.du===null||d.du>0)h+='<div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:14px 20px"><div><div style="font-size:13px;font-weight:600">'+esc(d.label)+'</div><div style="font-size:11px;color:#64748b">'+(d.date?fd(d.date):"Ongoing")+'</div></div>'+(d.du!==null?'<span style="font-size:11px;padding:3px 10px;border-radius:10px;font-weight:600;'+dpc(d.du)+'">'+d.du+'d</span>':'')+'</div>'});}
   }
 
-  // Auth overlay — shown when Supabase is configured but user is not logged in
+  // DISTRIBUTIONS
+  else if(CV==="distributions"&&t){
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="font-size:20px">Distributions</h2><button class="btn btn-accent btn-sm" onclick="om(\'distribution\')">+ Record</button></div>';
+    h+='<div class="info"><div class="info-t">Tax on Distributions ('+esc(t.type)+')</div><div class="info-b">'+(t.type==="Discretionary"?"Income carries 45% tax credit (39.35% dividends). Issue R185 to beneficiaries.":t.type==="Bare"?"Trust is transparent. Beneficiary taxed at own rates.":"Trustees pay basic rate. Life tenant declares gross on Self Assessment.")+'</div></div>';
+    var ds=gdi();
+    if(ds.length===0){h+='<div class="card empty" style="padding:40px">No distributions recorded.</div>';}
+    else ds.forEach(function(d){
+      var tc=calcDistTax(d,t);
+      h+='<div class="card card-click" onclick="om(\'distribution\',\''+esc(d.id)+'\')"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap"><span style="font-weight:700;font-size:15px">'+fm(d.amount)+'</span><span style="font-size:12px;color:#64748b">to</span><span style="font-weight:600;color:#1e40af">'+esc(bna(d.beneficiaryId))+'</span><span class="badge" style="background:#f0fdf4;color:#059669">'+esc(d.distType||"Income")+'</span></div>';
+      if(tc.taxCredit>0)h+='<div style="font-size:12px;color:#7c3aed;margin-bottom:4px">Tax credit: '+fm(tc.taxCredit)+' \u00B7 Gross: '+fm(tc.grossUp)+'</div>';
+      if(d.distType==="Capital"){var ec=calcExit(t,d.amount,d.date);if(ec&&ec.tax>0)h+='<div style="font-size:12px;color:#dc2626;margin-bottom:4px">Est. exit charge: '+fm(ec.tax)+' ('+ec.qtrs+'/40 qtrs)</div>';}
+      h+='<div style="font-size:12px;color:#64748b">'+fd(d.date)+(d.method?' \u00B7 '+esc(d.method):'')+(d.reason?' \u00B7 '+esc(d.reason):'')+'</div></div>';
+    });
+  }
+
+  // TAX
+  else if(CV==="tax"&&t){
+    var cgt2=calcCGT(t);
+    h+='<h2 style="font-size:20px;margin-bottom:16px">Tax Centre</h2>';
+    h+='<div class="kl" style="margin-bottom:10px">CAPITAL GAINS TAX 2025/26</div>';
+    h+='<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div style="font-size:16px;font-weight:700">CGT Summary</div><button class="btn btn-accent btn-sm" onclick="om(\'gain\')">+ Gain/Loss</button></div>';
+    h+='<div style="font-size:11px;color:#64748b;margin-bottom:10px">AEA: '+fm(cgt2.aea)+' (\u00A31,500 shared across '+cgt2.st+' trust'+(cgt2.st>1?'s':'')+')</div>';
+    [["Total gains",fm(cgt2.tg)],["Total losses","-"+fm(cgt2.tl),"#dc2626"],["Net gains",fm(cgt2.net)],["AEA used","-"+fm(Math.min(cgt2.net,cgt2.aea)),"#059669"],["Taxable gain",fm(cgt2.taxable)],["CGT @ 24%",fm(cgt2.tax),cgt2.tax>0?"#dc2626":"#059669"]].forEach(function(r){h+='<div class="tax-row"><span>'+r[0]+'</span><span'+(r[2]?' style="color:'+r[2]+'"':'')+'>'+r[1]+'</span></div>'});
+    if(cgt2.lc>0)h+='<div class="tax-row"><span>Losses carried forward</span><span>'+fm(cgt2.lc)+'</span></div>';
+    h+='</div>';
+    var gains2=gga();
+    if(gains2.length>0){gains2.sort(function(a,b){return new Date(b.date)-new Date(a.date)}).forEach(function(g){h+='<div class="card card-click" onclick="om(\'gain\',\''+esc(g.id)+'\')"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:600;font-size:13px">'+esc(g.asset||"Unnamed")+'</div><div style="font-size:11px;color:#64748b">'+fd(g.date)+(g.isResidential?' \u00B7 Residential':'')+'</div></div><div style="font-weight:700;color:'+(Number(g.amount)>=0?"#1e293b":"#dc2626")+'">'+fm(g.amount)+'</div></div></div>'});}
+    var iht2=calc10Y(t);
+    h+='<div class="kl" style="margin:20px 0 10px">INHERITANCE TAX \u00B7 10-YEAR CHARGE</div>';
+    h+='<div class="'+(iht2.taxDue>0?'tax-result warning':'tax-result')+'"><div class="tr-label">'+(iht2.taxDue>0?'ESTIMATED TAX DUE':'NO TAX DUE')+'</div><div class="tr-value">'+fm(iht2.taxDue)+'</div></div>';
+    h+='<div class="card">';
+    [["Trust value",fm(iht2.val)],["Capital distributions in period",fm(iht2.capDist)],["Hypothetical transfer",fm(iht2.hyp)],["Settlor prior CLTs",fm(iht2.clts)],["Available NRB",fmi(iht2.avNRB)],["Excess over NRB",fm(iht2.excess)],["Effective rate (3/10 of lifetime)",pct(iht2.perRate)],["Tax due",fm(iht2.taxDue)]].forEach(function(r){h+='<div class="tax-row"><span>'+r[0]+'</span><span>'+r[1]+'</span></div>'});
+    h+='</div>';
+    h+='<div class="info"><div class="info-t">'+(iht2.needsReturn?'IHT Return Required':'No Return Needed')+'</div><div class="info-b">'+(iht2.needsReturn?'Value exceeds 80% of NRB ('+fmi(NRB*0.8)+'). File IHT100 within 6 months of anniversary.':'Below 80% NRB threshold. No filing needed.')+'</div></div>';
+    h+='<div class="kl" style="margin:20px 0 10px">EXIT CHARGE CALCULATOR</div>';
+    h+='<div class="card"><div style="font-size:13px;color:#64748b;line-height:1.6;margin-bottom:12px">Pro-rated charge when capital leaves. Rate: '+pct(iht2.perRate)+' \u00D7 (quarters/40).</div>';
+    h+='<div class="g3"><div class="fg"><label class="label">Amount leaving</label><input class="input" id="exit-amt" type="number" step="0.01" oninput="doCalcExit()"></div><div class="fg"><label class="label">Date</label><input class="input" id="exit-date" type="date" value="'+tdy()+'" oninput="doCalcExit()"></div><div class="fg"><label class="label">Est. charge</label><div id="exit-result" style="padding:10px 14px;background:#faf9f7;border-radius:8px;font-weight:700;font-size:16px;min-height:42px;display:flex;align-items:center">'+fm(0)+'</div></div></div>';
+    h+='<div id="exit-detail" style="font-size:12px;color:#64748b;margin-top:4px"></div></div>';
+    h+='<div class="warn"><div class="wt">Disclaimer</div><div class="wb">These are estimates based on simplified calculations. Actual tax depends on full circumstances. Always verify with a qualified trust adviser.</div></div>';
+  }
+
+  // DECISIONS
+  else if(CV==="decisions"&&t){
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div><h2 style="font-size:20px">Decision Log</h2><p style="font-size:12px;color:#64748b;margin-top:4px">Trustee Act 2000 safeguard.</p></div><button class="btn btn-accent btn-sm" onclick="om(\'decision\')">+ Log</button></div>';
+    var dcs=gdc();
+    if(dcs.length===0){h+='<div class="card empty" style="padding:40px">No decisions logged.</div>';}
+    else dcs.forEach(function(d){h+='<div class="card card-click" onclick="om(\'decision\',\''+esc(d.id)+'\')"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge" style="background:#f0fdf4;color:#059669">'+esc(d.category)+'</span><span style="font-size:12px;color:#64748b">'+fd(d.date)+'</span></div><div style="font-weight:700;font-size:14px;margin-bottom:4px">'+esc(d.title)+'</div><div style="font-size:13px;color:#57534e;line-height:1.6;white-space:pre-wrap">'+esc(d.reasoning)+'</div>'+(d.attendees?'<div style="font-size:11px;color:#64748b;margin-top:8px">Present: '+esc(d.attendees)+'</div>':'')+'</div>'});
+  }
+
+  // ACCOUNTS
+  else if(CV==="accounts"&&t){
+    var st2=gs();
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="font-size:20px">Trust Accounts</h2><div style="display:flex;gap:8px"><button class="btn btn-accent btn-sm" onclick="om(\'income\')">+ Income</button><button class="btn btn-ghost btn-sm" onclick="om(\'expense\')">+ Expense</button></div></div>';
+    h+='<div class="card" style="margin-bottom:14px"><div class="g4" style="text-align:center">';
+    h+='<div><div class="kl">Opening</div><div style="font-size:18px;font-weight:700">'+fm(t.initialValue||0)+'</div></div>';
+    h+='<div><div class="kl">+ Income</div><div style="font-size:18px;font-weight:700;color:#059669">'+fm(st2?st2.tI:0)+'</div></div>';
+    h+='<div><div class="kl">- Outflows</div><div style="font-size:18px;font-weight:700;color:#dc2626">'+fm((st2?st2.tD:0)+(st2?st2.tE:0))+'</div></div>';
+    h+='<div><div class="kl">= Balance</div><div style="font-size:18px;font-weight:700;color:#1e40af">'+fm(st2?st2.bal:0)+'</div></div>';
+    h+='</div></div>';
+    var ax=[].concat(gin().map(function(i){return{date:i.date,txType:"income",amount:i.amount,label:i.source||i.type}})).concat(gex().map(function(e){return{date:e.date,txType:"expense",amount:e.amount,label:e.description||e.category}})).concat(gdi().map(function(d){return{date:d.date,txType:"distribution",amount:d.amount,label:"Distribution to "+bna(d.beneficiaryId)}})).sort(function(a,b){return new Date(b.date)-new Date(a.date)});
+    h+='<div class="card"><div class="kl" style="margin-bottom:12px">ALL TRANSACTIONS</div>';
+    if(ax.length===0)h+='<div style="padding:20px;text-align:center;color:#64748b;font-size:13px">No transactions</div>';
+    else ax.forEach(function(tx){h+='<div style="padding:12px 0;border-bottom:1px solid #e5e1dc;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600">'+esc(tx.label)+'</div><div style="font-size:11px;color:#64748b;margin-top:2px">'+fd(tx.date)+' \u00B7 '+tx.txType+'</div></div><div style="font-weight:700;color:'+(tx.txType==="income"?"#059669":"#dc2626")+'">'+(tx.txType==="income"?"+":"\u2212")+fm(tx.amount)+'</div></div>'});
+    h+='</div>';
+  }
+
+  // PEOPLE
+  else if(CV==="people"&&t){
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="font-size:20px">Beneficiaries</h2><button class="btn btn-accent btn-sm" onclick="om(\'beneficiary\')">+ Add</button></div>';
+    var bs=gbe(),st3=gs();
+    if(bs.length===0)h+='<div class="card" style="text-align:center;color:#64748b;margin-bottom:28px">No beneficiaries</div>';
+    else{bs.forEach(function(b,i){var rc=st3?((st3.pb.find(function(v){return v.id===b.id})||{}).total||0):0;h+='<div class="card card-click" onclick="om(\'beneficiary\',\''+esc(b.id)+'\')"><div style="display:flex;justify-content:space-between;align-items:center"><div style="display:flex;align-items:center;gap:12px"><div style="width:36px;height:36px;border-radius:20px;background:'+CO[i%CO.length]+'22;color:'+CO[i%CO.length]+';display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">'+esc(b.name.charAt(0))+'</div><div><div style="font-weight:700;font-size:14px">'+esc(b.name)+(b.taxBand?' <span class="badge" style="background:#eff6ff;color:#1e40af">'+esc(b.taxBand)+'</span>':'')+'</div><div style="font-size:12px;color:#64748b">'+esc(b.relationship||"")+(b.dob?' \u00B7 '+fd(b.dob):'')+'</div></div></div><div style="text-align:right"><div style="font-weight:700">'+fm(rc)+'</div><div style="font-size:11px;color:#64748b">received</div></div></div></div>'});h+='<div style="margin-bottom:28px"></div>';}
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="font-size:20px">Trustees</h2><button class="btn btn-accent btn-sm" onclick="om(\'trustee\')">+ Add</button></div>';
+    var ts=gtr();
+    if(ts.length===0)h+='<div class="card" style="text-align:center;color:#64748b">No trustees</div>';
+    else ts.forEach(function(tr){h+='<div class="card card-click" onclick="om(\'trustee\',\''+esc(tr.id)+'\')"><div style="font-weight:700;font-size:14px">'+esc(tr.name)+(tr.professional?' <span class="badge" style="background:#eff6ff;color:#1e40af">Professional</span>':'')+'</div><div style="font-size:12px;color:#64748b">'+esc(tr.role)+' \u00B7 Appointed '+fd(tr.appointedDate)+'</div></div>'});
+  }
+
+  // COMPLIANCE
+  else if(CV==="dates"&&t){
+    var st4=gs();
+    h+='<h2 style="font-size:20px;margin-bottom:4px">Compliance Calendar</h2><p style="font-size:13px;color:#64748b;margin-bottom:18px">'+esc(t.name)+'</p>';
+    if(st4)st4.kd.forEach(function(d){h+='<div class="card" style="display:flex;justify-content:space-between;align-items:center"><div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px"><span class="badge" style="'+dtc(d.type)+'">'+esc(d.type)+'</span><span style="font-weight:700;font-size:14px">'+esc(d.label)+'</span></div><div style="font-size:12px;color:#64748b">'+(d.date?fd(d.date):"Ongoing")+'</div></div>'+(d.du!==null?'<div style="text-align:right;min-width:60px"><div style="font-size:20px;font-weight:700;color:'+(d.du<60?"#dc2626":d.du<180?"#d97706":"#059669")+'">'+d.du+'d</div><div style="font-size:10px;color:#64748b">left</div></div>':'')+'</div>'});
+    h+='<div class="warn"><div class="wt">Trustee Obligations</div><div class="wb">\u2022 File SA900 annually (paper 31 Oct / electronic 31 Jan)<br>\u2022 Register + update TRS within 90 days of changes<br>\u2022 Issue R185 to beneficiaries each tax year<br>\u2022 File IHT100 within 6 months of 10-year anniversary<br>\u2022 Report CGT on residential property within 60 days<br>\u2022 Keep records of all transactions and decisions<br>\u2022 Act in beneficiaries\' best interests (Trustee Act 2000)<br>\u2022 Review investments prudently</div></div>';
+  }
+
+  h+='</div>'; // end .content
+
+  // MODALS
+  if(MT){h+='<div class="modal-bg" onclick="cm()"><div class="modal" onclick="event.stopPropagation()"><div class="mh"><h3>'+modalTitle()+'</h3><button class="mc" onclick="cm()">\u00D7</button></div>'+modalBody()+'</div></div>';}
+
+  // AUTH OVERLAY
   if(sbConfigured&&!currentUser){
-    h+='<div class="auth-overlay">';
-    h+='<div class="auth-box">';
+    h+='<div class="auth-overlay"><div class="auth-box">';
     h+='<h2 style="font-size:22px;font-weight:700;margin-bottom:6px">Trust Manager</h2>';
     h+='<p style="font-size:13px;color:#64748b;line-height:1.6;margin-bottom:22px">Your trust records, secured and synced across all your devices.</p>';
-
     if(authStep==='sent'){
-      h+='<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:20px;text-align:center">';
-      h+='<div style="font-size:32px;margin-bottom:8px">\u2709\uFE0F</div>';
-      h+='<div style="font-size:15px;font-weight:700;color:#166534;margin-bottom:6px">Check your email</div>';
-      h+='<div style="font-size:13px;color:#166534">We sent a sign-in link to<br><strong>'+esc(authEmail)+'</strong></div>';
-      h+='</div>';
+      h+='<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:20px;text-align:center"><div style="font-size:32px;margin-bottom:8px">\u2709\uFE0F</div><div style="font-size:15px;font-weight:700;color:#166534;margin-bottom:6px">Check your email</div><div style="font-size:13px;color:#166534">We sent a sign-in link to<br><strong>'+esc(authEmail)+'</strong></div></div>';
       h+='<div style="margin-top:16px;text-align:center"><button onclick="resetAuth()" style="background:none;border:none;color:#94a3b8;font-size:12px;cursor:pointer;text-decoration:underline">Use a different email address</button></div>';
     } else {
       h+='<div class="fg"><label class="label">Email address</label><input class="input" type="email" id="auth-email" placeholder="you@example.com" onkeydown="if(event.key===\'Enter\')sendMagicLink()" autocomplete="email"></div>';
@@ -680,18 +795,25 @@ function R(){
       h+='<div id="auth-err" style="display:none;margin-top:10px;font-size:12px;color:#991b1b;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:10px"></div>';
       h+='<p style="font-size:11px;color:#94a3b8;margin-top:16px;text-align:center;line-height:1.6">A one-click sign-in link will be emailed to you.<br>No password. No app to download.</p>';
     }
-
-    h+='</div></div>'; // end auth-box, auth-overlay
+    h+='</div></div>';
   }
 
   app.innerHTML=h;
 }
 
+// Guide entry renderer
+function guideEntry(e){
+  var h='<div class="ge"><div class="ge-head" onclick="toggleEntry(\''+e.id+'\')"><div class="ge-cat-dot" style="background:'+e.color+'"></div><div style="flex:1;min-width:0"><div class="ge-title">'+esc(e.title)+'</div><div class="ge-summary">'+esc(e.summary)+'</div></div><div class="ge-chevron" id="ge-chev-'+e.id+'">&#8964;</div></div>';
+  h+='<div class="ge-body" id="ge-body-'+e.id+'">'+e.body;
+  if(e.example){h+='<div class="ge-example"><div class="ge-example-label">Worked example</div>'+e.example+'</div>';}
+  h+='</div></div>';
+  return h;
+}
+
 // ============================================================
-// MODAL CONTENT (unchanged)
+// MODALS
 // ============================================================
 function modalTitle(){return{trust:MD.id?"Edit Trust":"New Trust",beneficiary:MD.id?"Edit Beneficiary":"Add Beneficiary",trustee:MD.id?"Edit Trustee":"Add Trustee",distribution:MD.id?"Edit Distribution":"Record Distribution",decision:MD.id?"Edit Decision":"Log Decision",income:"Record Income",expense:"Record Expense",gain:MD.id?"Edit Gain/Loss":"Record Gain/Loss"}[MT]||""}
-
 function modalBody(){
   var h="",d=MD;
   if(MT==="trust"){
@@ -761,82 +883,47 @@ function modalBody(){
 }
 
 // ============================================================
-// INIT
-// ============================================================
-async function init(){
-  if(sbConfigured&&sb){
-    try{
-      var res=await sb.auth.getSession();
-      if(res.data&&res.data.session){
-        currentUser=res.data.session.user;
-        await loadFromCloud();
-        return;
-      }
-    }catch(e){console.warn('Session check failed:',e);}
-  }
-  // Not configured or no session — load from localStorage
-  try{
-    var s=localStorage.getItem(SK);
-    if(s){var p=JSON.parse(s);Object.keys(S).forEach(function(k){if(p[k])S[k]=p[k]});if(S.trusts.length>0)AT=S.trusts[0].id}
-  }catch(e){}
-  R();
-}
-
-// ============================================================
-// STARTUP — load Supabase dynamically then init
-// This pattern works on GitHub Pages, Netlify, and local file://
+// STARTUP — dynamic Supabase load (works on GitHub Pages)
 // ============================================================
 function startApp(){
-  // Show a loading state immediately so the page is never blank
   var app=document.getElementById('app');
   if(app)app.innerHTML='<div style="padding:60px 20px;text-align:center;color:#64748b;font-family:system-ui,sans-serif"><div style="font-size:32px;margin-bottom:12px">\u2696</div><div style="font-size:15px;font-weight:600;color:#1e293b;margin-bottom:6px">Trust Manager</div><div style="font-size:13px">Loading\u2026</div></div>';
 
-  if(!sbConfigured){
-    // No Supabase credentials — run in localStorage mode immediately
-    init();
-    return;
-  }
+  if(!sbConfigured){init();return;}
 
-  // Dynamically load Supabase so it works on any host
   var script=document.createElement('script');
   script.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
   script.onload=function(){
     try{
       sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-      // Re-wire the auth listener now that sb exists
       sb.auth.onAuthStateChange(function(event,session){
-        if(event==='SIGNED_IN'&&session&&!currentUser){
-          currentUser=session.user;
-          authStep='form';
-          loadFromCloud();
-        }
-        if(event==='SIGNED_OUT'){
-          currentUser=null;
-          S={trusts:[],beneficiaries:[],trustees:[],distributions:[],decisions:[],income:[],expenses:[],gains:[]};
-          AT=null;R();
-        }
+        if(event==='SIGNED_IN'&&session&&!currentUser){currentUser=session.user;authStep='form';loadFromCloud();}
+        if(event==='SIGNED_OUT'){currentUser=null;S={trusts:[],beneficiaries:[],trustees:[],distributions:[],decisions:[],income:[],expenses:[],gains:[]};AT=null;R();}
       });
-    }catch(e){
-      console.warn('Supabase client failed:',e);
-      sbConfigured=false;
-    }
+    }catch(e){console.warn('Supabase client failed:',e);sbConfigured=false;}
     init();
   };
-  script.onerror=function(){
-    console.warn('Supabase script failed to load — running in local mode');
-    sbConfigured=false;
-    init();
-  };
+  script.onerror=function(){console.warn('Supabase failed to load — local mode');sbConfigured=false;init();};
   document.head.appendChild(script);
 }
 
-// Guard against any uncaught errors causing a blank page
+async function init(){
+  if(sbConfigured&&sb){
+    try{
+      var res=await sb.auth.getSession();
+      if(res.data&&res.data.session){currentUser=res.data.session.user;await loadFromCloud();return;}
+    }catch(e){console.warn('Session check failed:',e);}
+  }
+  try{var s=localStorage.getItem(SK);if(s){var p=JSON.parse(s);Object.keys(S).forEach(function(k){if(p[k])S[k]=p[k]});if(S.trusts.length>0)AT=S.trusts[0].id}}catch(e){}
+  R();
+}
+
 window.addEventListener('DOMContentLoaded',function(){
   try{startApp();}
   catch(e){
     console.error('Startup error:',e);
     var app=document.getElementById('app');
-    if(app)app.innerHTML='<div style="padding:40px;text-align:center;font-family:system-ui,sans-serif"><p style="color:#dc2626;font-size:14px">Something went wrong loading Trust Manager.</p><p style="color:#64748b;font-size:12px;margin-top:8px">Try refreshing the page. If this keeps happening, open the browser console for details.</p></div>';
+    if(app)app.innerHTML='<div style="padding:40px;text-align:center;font-family:system-ui,sans-serif"><p style="color:#dc2626;font-size:14px">Something went wrong loading Trust Manager.</p><p style="color:#64748b;font-size:12px;margin-top:8px">Try refreshing the page.</p></div>';
   }
 });
 </script>
