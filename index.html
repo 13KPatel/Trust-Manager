@@ -120,6 +120,7 @@ button{font-family:inherit}
 </style>
 </head>
 <body>
+<input type="file" id="import-file" accept="application/json,.json" style="display:none" onchange="handleImportFile(event)">
 <div id="app"></div>
 <script>
 /*
@@ -153,6 +154,7 @@ var SUPABASE_ANON_KEY = 'YOUR-ANON-KEY-HERE';
 // APP STATE
 // ============================================================
 var SK="trust-manager-v2";
+var DATA_VERSION=1; // bump this if the saved-data shape ever changes
 var TT=["Discretionary","Bare","Interest in Possession","Life Interest","Will Trust","Mixed","Charitable"];
 var CO=["#1e40af","#059669","#d97706","#dc2626","#7c3aed","#0891b2","#be185d","#65a30d"];
 var ME=["Bank Transfer","Cheque","Cash","In-Kind"];
@@ -302,6 +304,13 @@ function gin(){return S.income.filter(function(i){return i.trustId===AT})}
 function gex(){return S.expenses.filter(function(e){return e.trustId===AT})}
 function gga(){return S.gains.filter(function(g){return g.trustId===AT})}
 function bna(id){var b=gbe().find(function(v){return v.id===id});return b?b.name:"Unknown"}
+// Days since the current value was last updated (null if never stamped / no value)
+function valueStaleDays(trust){
+  if(!trust)return null;
+  if(!Number(trust.currentValue||0))return null; // nothing to keep current
+  if(!trust.valueUpdatedAt)return null;
+  return dbt(trust.valueUpdatedAt,tdy());
+}
 function findItem(type,id){var map={trust:"trusts",beneficiary:"beneficiaries",trustee:"trustees",distribution:"distributions",decision:"decisions",income:"income",expense:"expenses",gain:"gains"};var key=map[type];if(!key)return{};var item=S[key].find(function(v){return v.id===id});return item?JSON.parse(JSON.stringify(item)):{}}
 
 // ============================================================
@@ -494,6 +503,13 @@ window.doCalcExit=function(){
 window.saveTrust=function(){
   var n=document.getElementById("m-name").value;if(!n)return;
   var o={id:MD.id||gid(),name:n,type:document.getElementById("m-type").value,established:document.getElementById("m-est").value||tdy(),initialValue:Number(document.getElementById("m-val").value||0),currentValue:Number(document.getElementById("m-curval").value||0),settlorPriorCLTs:Number(document.getElementById("m-clts").value||0),settlorTrusts:Number(document.getElementById("m-strust").value||1),notes:document.getElementById("m-notes").value};
+  // Stamp when the current value was last set/changed, for the staleness nudge
+  var prev=MD.id?S.trusts.find(function(v){return v.id===MD.id}):null;
+  if(!prev||Number(prev.currentValue||0)!==o.currentValue||!prev.valueUpdatedAt){
+    o.valueUpdatedAt=tdy();
+  } else {
+    o.valueUpdatedAt=prev.valueUpdatedAt;
+  }
   if(MD.id){S.trusts=S.trusts.map(function(v){return v.id===MD.id?o:v})}else{S.trusts.push(o)}
   if(!AT)AT=o.id;sv();cm();
 };
@@ -532,8 +548,110 @@ window.saveGain=function(){
   var o={id:MD.id||gid(),trustId:AT,amount:Number(amt),date:document.getElementById("m-date").value||tdy(),asset:document.getElementById("m-asset").value,isResidential:document.getElementById("m-res").checked};
   if(MD.id){S.gains=S.gains.map(function(v){return v.id===MD.id?o:v})}else{S.gains.push(o)}sv();cm();
 };
+// ============================================================
+// EXPORT / IMPORT — data safety
+// ============================================================
+window.exportData=function(){
+  try{
+    var payload={
+      _format:'trust-manager-backup',
+      _version:DATA_VERSION,
+      _exportedAt:new Date().toISOString(),
+      data:S
+    };
+    var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    var stamp=new Date().toISOString().split('T')[0];
+    a.href=url;
+    a.download='trust-manager-backup-'+stamp+'.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){URL.revokeObjectURL(url);},1000);
+  }catch(e){
+    alert('Could not export your data. '+(e.message||''));
+  }
+};
+
+window.triggerImport=function(){
+  var inp=document.getElementById('import-file');
+  if(inp)inp.click();
+};
+
+window.handleImportFile=function(ev){
+  var file=ev.target.files&&ev.target.files[0];
+  if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var parsed=JSON.parse(e.target.result);
+      var incoming=parsed&&parsed.data?parsed.data:parsed; // accept wrapped or raw
+      if(!incoming||!incoming.trusts){throw new Error('This does not look like a Trust Manager backup file.');}
+      var counts=(incoming.trusts.length)+' trust'+(incoming.trusts.length===1?'':'s');
+      var mode=confirm('Import '+counts+' from this backup?\n\nOK = MERGE with your current data (keeps everything, skips duplicates).\nCancel = choose Replace instead.');
+      if(mode){
+        mergeImport(incoming);
+      } else {
+        if(confirm('REPLACE everything instead?\n\nThis wipes your current data and loads only the backup. This cannot be undone.\n\nTip: export your current data first if unsure.')){
+          replaceImport(incoming);
+        } else {
+          ev.target.value='';
+          return;
+        }
+      }
+    }catch(err){
+      alert('Import failed: '+(err.message||'Invalid file.'));
+    }
+    ev.target.value=''; // reset so the same file can be re-selected
+  };
+  reader.readAsText(file);
+};
+
+function mergeImport(incoming){
+  var keys=['trusts','beneficiaries','trustees','distributions','decisions','income','expenses','gains'];
+  keys.forEach(function(k){
+    if(!Array.isArray(incoming[k]))return;
+    var existingIds={};
+    S[k].forEach(function(item){existingIds[item.id]=true;});
+    incoming[k].forEach(function(item){
+      if(item&&item.id&&!existingIds[item.id])S[k].push(item);
+    });
+  });
+  if(!AT&&S.trusts.length>0)AT=S.trusts[0].id;
+  persistAll();
+  CV=S.trusts.length>0?'dashboard':'home';
+  R();
+  alert('Import complete. Your records have been merged.');
+}
+
+function replaceImport(incoming){
+  var keys=['trusts','beneficiaries','trustees','distributions','decisions','income','expenses','gains'];
+  var fresh={trusts:[],beneficiaries:[],trustees:[],distributions:[],decisions:[],income:[],expenses:[],gains:[]};
+  keys.forEach(function(k){if(Array.isArray(incoming[k]))fresh[k]=incoming[k];});
+  S=fresh;
+  AT=S.trusts.length>0?S.trusts[0].id:null;
+  persistAll();
+  CV=S.trusts.length>0?'dashboard':'home';
+  R();
+  alert('Import complete. Your data has been replaced with the backup.');
+}
+
+// Save every trust to the cloud (used after a bulk import)
+function persistAll(){
+  try{localStorage.setItem(SK,JSON.stringify(S));}catch(e){}
+  if(currentUser&&sb){
+    syncStatus='syncing';
+    var ops=S.trusts.map(function(tr){return saveTrustToCloud(tr.id);});
+    Promise.all(ops).then(function(){syncStatus='saved';var el=document.getElementById('sync-status');if(el)el.innerHTML=syncStatusHTML();}).catch(function(){syncStatus='error';});
+  }
+}
+
 window.confirmDeleteTrust=function(id,name){
   if(!confirm('Delete "'+name+'"?\n\nThis will permanently remove the trust and ALL its records — beneficiaries, distributions, decisions, accounts and gains.\n\nThis cannot be undone.'))return;
+  if(confirm('Before deleting — would you like to download a backup of all your data first?\n\nOK = download backup, then delete.\nCancel = delete without a backup.')){
+    exportData();
+  }
   S.trusts=S.trusts.filter(function(v){return v.id!==id});
   S.beneficiaries=S.beneficiaries.filter(function(v){return v.trustId!==id});
   S.trustees=S.trustees.filter(function(v){return v.trustId!==id});
@@ -679,6 +797,18 @@ function R(){
       h+='</div>';
     }
 
+    // Data & backup section
+    h+='<div style="margin-top:24px">';
+    h+='<div style="font-size:11px;font-weight:700;letter-spacing:1px;color:#64748b;text-transform:uppercase;margin-bottom:10px">Data &amp; backup</div>';
+    h+='<div class="card" style="padding:16px 18px">';
+    h+='<div style="font-size:12px;color:#64748b;line-height:1.6;margin-bottom:12px">Your records are valuable. Download a backup file you can keep safe or move to another device. You can re-import it any time.'+(!sbConfigured?' <strong style="color:#92400e">In local mode your data lives only in this browser — back it up regularly.</strong>':'')+'</div>';
+    h+='<div style="display:flex;gap:8px;flex-wrap:wrap">';
+    h+='<button class="btn btn-primary btn-sm" onclick="exportData()">\u2193 Download backup</button>';
+    h+='<button class="btn btn-ghost btn-sm" onclick="triggerImport()">\u2191 Import backup</button>';
+    h+='</div>';
+    h+='</div>';
+    h+='</div>';
+
     h+='<div class="warn" style="margin-top:20px"><div class="wt">You are personally responsible</div><div class="wb">As a trustee you have legal duties under the Trustee Act 2000. Mistakes can make you personally liable to beneficiaries for any loss caused. This app helps you keep records and understand your obligations — but it does not replace professional advice. Always consult a solicitor or accountant for significant decisions.</div></div>';
 
     if(!t){
@@ -729,6 +859,14 @@ function R(){
   else if(CV==="dashboard"&&t){
     var st=gs();
     h+='<div class="card" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><div><h2 style="font-size:20px">'+esc(t.name)+'</h2><div style="font-size:13px;color:#64748b;margin-top:4px">'+esc(t.type)+' Trust \u00B7 Est. '+fd(t.established)+'</div></div><button class="btn btn-ghost btn-sm" onclick="om(\'trust\',\''+esc(t.id)+'\')">Edit</button></div>';
+    // Value-update nudge — the 10-year charge depends on current value, so prompt if stale (>180 days)
+    var stale=valueStaleDays(t);
+    if(stale!==null&&stale>180){
+      h+='<div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">';
+      h+='<div style="font-size:12px;color:#92400e;line-height:1.5"><strong>Is the trust value still correct?</strong><br>You last updated it '+Math.round(stale/30)+' months ago. The tax estimates depend on it being current.</div>';
+      h+='<button onclick="om(\'trust\',\''+esc(t.id)+'\')" style="background:#92400e;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap">Update value</button>';
+      h+='</div>';
+    }
     h+='<div class="kpi-grid">';
     [{l:"Current Value",v:fm(t.currentValue||t.initialValue||0),c:"#1e293b"},{l:"Distributed",v:fm(st.tD),c:"#64748b"},{l:"Income",v:fm(st.tI),c:"#059669"},{l:"Expenses",v:fm(st.tE),c:"#d97706"}].forEach(function(k){h+='<div class="card"><div class="kl">'+k.l+'</div><div class="kv" style="color:'+k.c+'">'+k.v+'</div></div>'});
     h+='</div>';
