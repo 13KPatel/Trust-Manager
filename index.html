@@ -340,15 +340,64 @@ function obSteps(){
 // ============================================================
 // TAX CALCULATIONS
 // ============================================================
-function calcDistTax(dist,trust){
+// calcDistTax now accepts an optional bandUsed (how much of the £1,000
+// standard rate band earlier income in the year has already consumed).
+function calcDistTax(dist,trust,bandUsed){
   var amt=Number(dist.amount),type=dist.distType||"Income - Non-Savings",tType=trust.type||"Discretionary";
+  bandUsed=Number(bandUsed||0);
   if(tType==="Bare")return{grossUp:amt,taxCredit:0,rate:0,note:"Bare trust: beneficiary taxed at own rates."};
   if(type==="Capital")return{grossUp:amt,taxCredit:0,rate:0,note:"Capital distribution. May trigger exit charge."};
-  var rate=0.45;
-  if(type==="Income - Dividends")rate=0.3935;
-  if(tType==="Interest in Possession"||tType==="Life Interest")rate=type==="Income - Dividends"?0.0875:0.20;
-  if(tType==="Discretionary"||tType==="Mixed"){var gu=amt/(1-rate);return{grossUp:gu,taxCredit:gu-amt,rate:rate,note:"Tax credit at "+pct(rate)+". Gross-up: "+fm(gu)+". Issue R185."};}
-  return{grossUp:amt,taxCredit:amt*rate,rate:rate,note:tType+": trustees pay "+pct(rate)+". Life tenant declares gross on SA."};
+
+  // Settlor-interested: income is taxed on the settlor at their marginal rate,
+  // NOT at trust rates. No standard trust gross-up / R185 tax credit applies.
+  if(trust.settlorInterested){
+    return{grossUp:amt,taxCredit:0,rate:0,settlorInterested:true,
+      note:"Settlor-interested trust: this income is taxed on the SETTLOR at their marginal rate, not at the trust rate. Report on the settlor's Self Assessment — do not issue a standard R185 tax credit."};
+  }
+
+  var isDiv=(type==="Income - Dividends");
+  var trustRate=isDiv?0.3935:0.45;       // rate applicable to trusts
+  var basicRate=isDiv?0.0875:0.20;       // standard rate band rate
+
+  // IIP / Life interest: basic rate only, life tenant declares gross. (SRB not relevant.)
+  if(tType==="Interest in Possession"||tType==="Life Interest"){
+    var r=basicRate;
+    return{grossUp:amt,taxCredit:amt*r,rate:r,note:tType+": trustees pay "+pct(r)+". Life tenant declares gross on SA."};
+  }
+
+  // Discretionary / Mixed: apply the standard rate band.
+  // The first £1,000 of trust income (across the year) is taxed at basicRate,
+  // the remainder at trustRate. We gross up the NET distribution accordingly.
+  if(tType==="Discretionary"||tType==="Mixed"){
+    var bandLeft=Math.max(0,1000-bandUsed);
+    // To find the gross income this net amount represents, split the gross into
+    // the part still within the band and the part above it.
+    // Solve: net = grossInBand*(1-basicRate) + grossAbove*(1-trustRate)
+    // where grossInBand <= bandLeft.
+    var netIfAllBand=bandLeft*(1-basicRate);
+    var gross,taxCredit;
+    if(amt<=netIfAllBand){
+      // Entire distribution sits within the standard rate band
+      gross=amt/(1-basicRate);
+      taxCredit=gross-amt;
+      return{grossUp:gross,taxCredit:taxCredit,rate:basicRate,bandGrossUsed:gross,
+        note:"Within the \u00A31,000 standard rate band. Taxed at "+pct(basicRate)+". Gross: "+fm(gross)+". Issue R185."};
+    }
+    // Part in band, part above
+    var grossInBand=bandLeft;
+    var netInBand=grossInBand*(1-basicRate);
+    var netAbove=amt-netInBand;
+    var grossAbove=netAbove/(1-trustRate);
+    gross=grossInBand+grossAbove;
+    taxCredit=gross-amt;
+    var blendedRate=gross>0?taxCredit/gross:trustRate;
+    return{grossUp:gross,taxCredit:taxCredit,rate:blendedRate,bandGrossUsed:grossInBand,
+      note:"\u00A3"+Math.round(grossInBand)+" used the standard rate band at "+pct(basicRate)+", the rest at "+pct(trustRate)+". Gross: "+fm(gross)+". Issue R185."};
+  }
+
+  // Fallback
+  var rate=trustRate;
+  return{grossUp:amt,taxCredit:amt*rate,rate:rate,note:tType+": trustees pay "+pct(rate)+"."};
 }
 function calcCGT(trust){
   var gains=gga(),st=Number(trust.settlorTrusts||1),fullAEA=1500;
@@ -502,7 +551,7 @@ window.doCalcExit=function(){
 // ============================================================
 window.saveTrust=function(){
   var n=document.getElementById("m-name").value;if(!n)return;
-  var o={id:MD.id||gid(),name:n,type:document.getElementById("m-type").value,established:document.getElementById("m-est").value||tdy(),initialValue:Number(document.getElementById("m-val").value||0),currentValue:Number(document.getElementById("m-curval").value||0),settlorPriorCLTs:Number(document.getElementById("m-clts").value||0),settlorTrusts:Number(document.getElementById("m-strust").value||1),notes:document.getElementById("m-notes").value};
+  var o={id:MD.id||gid(),name:n,type:document.getElementById("m-type").value,established:document.getElementById("m-est").value||tdy(),initialValue:Number(document.getElementById("m-val").value||0),currentValue:Number(document.getElementById("m-curval").value||0),settlorPriorCLTs:Number(document.getElementById("m-clts").value||0),settlorTrusts:Number(document.getElementById("m-strust").value||1),settlorInterested:document.getElementById("m-settint")?document.getElementById("m-settint").checked:false,notes:document.getElementById("m-notes").value};
   // Stamp when the current value was last set/changed, for the staleness nudge
   var prev=MD.id?S.trusts.find(function(v){return v.id===MD.id}):null;
   if(!prev||Number(prev.currentValue||0)!==o.currentValue||!prev.valueUpdatedAt){
@@ -881,16 +930,43 @@ function R(){
   // DISTRIBUTIONS
   else if(CV==="distributions"&&t){
     h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="font-size:20px">Distributions</h2><button class="btn btn-accent btn-sm" onclick="om(\'distribution\')">+ Record</button></div>';
-    h+='<div class="info"><div class="info-t">Tax on Distributions ('+esc(t.type)+')</div><div class="info-b">'+(t.type==="Discretionary"?"Income carries 45% tax credit (39.35% dividends). Issue R185 to beneficiaries.":t.type==="Bare"?"Trust is transparent. Beneficiary taxed at own rates.":"Trustees pay basic rate. Life tenant declares gross on Self Assessment.")+'</div></div>';
+    if(t.settlorInterested){
+      h+='<div class="warn" style="margin-top:0"><div class="wt">Settlor-interested trust</div><div class="wb">Income from this trust is taxed on the <strong>settlor</strong> at their marginal rate, not at the trust rate. Distributions do not carry the usual trust tax credit. The settlor reports the income on their own Self Assessment.</div></div>';
+    } else {
+      h+='<div class="info"><div class="info-t">Tax on Distributions ('+esc(t.type)+')</div><div class="info-b">'+(t.type==="Discretionary"||t.type==="Mixed"?"First \u00A31,000 of income taxed at 20% (8.75% dividends); the rest at 45% (39.35% dividends). Issue R185 to beneficiaries.":t.type==="Bare"?"Trust is transparent. Beneficiary taxed at own rates.":"Trustees pay basic rate. Life tenant declares gross on Self Assessment.")+'</div></div>';
+    }
     var ds=gdi();
     if(ds.length===0){h+='<div class="card empty" style="padding:40px">No distributions recorded.</div>';}
-    else ds.forEach(function(d){
-      var tc=calcDistTax(d,t);
-      h+='<div class="card card-click" onclick="om(\'distribution\',\''+esc(d.id)+'\')"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap"><span style="font-weight:700;font-size:15px">'+fm(d.amount)+'</span><span style="font-size:12px;color:#64748b">to</span><span style="font-weight:600;color:#1e40af">'+esc(bna(d.beneficiaryId))+'</span><span class="badge" style="background:#f0fdf4;color:#059669">'+esc(d.distType||"Income")+'</span></div>';
-      if(tc.taxCredit>0)h+='<div style="font-size:12px;color:#7c3aed;margin-bottom:4px">Tax credit: '+fm(tc.taxCredit)+' \u00B7 Gross: '+fm(tc.grossUp)+'</div>';
-      if(d.distType==="Capital"){var ec=calcExit(t,d.amount,d.date);if(ec&&ec.tax>0)h+='<div style="font-size:12px;color:#dc2626;margin-bottom:4px">Est. exit charge: '+fm(ec.tax)+' ('+ec.qtrs+'/40 qtrs)</div>';}
-      h+='<div style="font-size:12px;color:#64748b">'+fd(d.date)+(d.method?' \u00B7 '+esc(d.method):'')+(d.reason?' \u00B7 '+esc(d.reason):'')+'</div></div>';
-    });
+    else {
+      // Allocate the £1,000 standard rate band oldest-first within each tax year,
+      // so each distribution is grossed up using the band still available at its date.
+      var bandByYear={}; // taxYearStartYear -> gross income already run through the band
+      function taxYearOf(dateStr){
+        var dt=new Date(dateStr);
+        // UK tax year starts 6 April
+        var y=dt.getFullYear();
+        var boundary=new Date(y+'-04-06');
+        return dt<boundary?(y-1):y;
+      }
+      var oldestFirst=ds.slice().sort(function(a,b){return new Date(a.date)-new Date(b.date)});
+      var bandUsedById={};
+      oldestFirst.forEach(function(d){
+        var ty=taxYearOf(d.date);
+        var used=bandByYear[ty]||0;
+        bandUsedById[d.id]=used;
+        var tcCalc=calcDistTax(d,t,used);
+        if(tcCalc.bandGrossUsed)bandByYear[ty]=used+tcCalc.bandGrossUsed;
+      });
+      // Display newest-first (ds is already sorted that way)
+      ds.forEach(function(d){
+        var tc=calcDistTax(d,t,bandUsedById[d.id]||0);
+        h+='<div class="card card-click" onclick="om(\'distribution\',\''+esc(d.id)+'\')"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap"><span style="font-weight:700;font-size:15px">'+fm(d.amount)+'</span><span style="font-size:12px;color:#64748b">to</span><span style="font-weight:600;color:#1e40af">'+esc(bna(d.beneficiaryId))+'</span><span class="badge" style="background:#f0fdf4;color:#059669">'+esc(d.distType||"Income")+'</span></div>';
+        if(tc.settlorInterested)h+='<div style="font-size:12px;color:#92400e;margin-bottom:4px">Taxed on settlor at marginal rate \u00B7 no trust tax credit</div>';
+        else if(tc.taxCredit>0)h+='<div style="font-size:12px;color:#7c3aed;margin-bottom:4px">Tax credit: '+fm(tc.taxCredit)+' \u00B7 Gross: '+fm(tc.grossUp)+'</div>';
+        if(d.distType==="Capital"){var ec=calcExit(t,d.amount,d.date);if(ec&&ec.tax>0)h+='<div style="font-size:12px;color:#dc2626;margin-bottom:4px">Est. exit charge: '+fm(ec.tax)+' ('+ec.qtrs+'/40 qtrs)</div>';}
+        h+='<div style="font-size:12px;color:#64748b">'+fd(d.date)+(d.method?' \u00B7 '+esc(d.method):'')+(d.reason?' \u00B7 '+esc(d.reason):'')+'</div></div>';
+      });
+    }
   }
 
   // TAX
@@ -1010,6 +1086,7 @@ function modalBody(){
     h+='<div class="g2"><div class="fg"><label class="label">Initial Value</label><input class="input" type="number" step="0.01" id="m-val" value="'+(d.initialValue||"")+'"></div><div class="fg"><label class="label">Current Value</label><input class="input" type="number" step="0.01" id="m-curval" value="'+(d.currentValue||"")+'"></div></div>';
     h+='<div class="info"><div class="info-t">For IHT + CGT Calculations</div><div class="info-b">Prior CLTs affect the nil-rate band available. Number of trusts affects CGT annual exempt amount apportionment.</div></div>';
     h+='<div class="g2"><div class="fg"><label class="label">Settlor Prior CLTs (\u00A3)</label><input class="input" type="number" id="m-clts" value="'+(d.settlorPriorCLTs||"0")+'"></div><div class="fg"><label class="label">Settlor Total Trusts</label><input class="input" type="number" min="1" id="m-strust" value="'+(d.settlorTrusts||"1")+'"></div></div>';
+    h+='<div class="fg"><label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:13px;line-height:1.5"><input type="checkbox" id="m-settint"'+(d.settlorInterested?" checked":"")+' style="width:16px;height:16px;margin-top:2px;flex-shrink:0"> <span>Settlor-interested trust<br><span style="font-size:11px;color:#64748b">Tick if the settlor, their spouse/civil partner, or their minor children can benefit. Income will then be taxed on the settlor, not the trust.</span></span></label></div>';
     h+='<div class="fg"><label class="label">Notes</label><textarea class="textarea" id="m-notes">'+esc(d.notes||"")+'</textarea></div>';
     h+='<div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap"><button class="btn btn-primary" onclick="saveTrust()">Save</button>';
     if(d.id)h+='<button class="btn btn-danger" onclick="delItem(\'trust\',\''+esc(d.id)+'\')">Delete Trust</button>';
