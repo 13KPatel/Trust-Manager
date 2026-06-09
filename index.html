@@ -369,39 +369,34 @@ function calcTaxPool(trust){
   });
 
   // --- THIS YEAR figures ---
+  // Recompute cleanly for the current year using the same single-pass approach.
   var curYear=taxYearOf(tdy());
   var yearStart=new Date(curYear+'-04-06');
   var yearEnd=new Date((curYear+1)+'-04-06');
 
-  var thisYearSRBIn=incSRBByYear[curYear]||0;
+  var thisYearSRBIn=0;
   var thisYearPoolIn=0;
-  allIncome.forEach(function(inc){
+  allIncome.slice().sort(function(a,b){return new Date(a.date)-new Date(b.date)}).forEach(function(inc){
     if(inc.type==='Sale Proceeds')return;
-    var dt=new Date(inc.date);if(dt<yearStart||dt>=yearEnd)return;
+    var dt=new Date(inc.date);
+    if(dt<yearStart||dt>=yearEnd)return;
     var amt=Number(inc.amount);
     var isDividend=(inc.type==='Dividends');
-    var trustRate=isDividend?0.3935:0.45;
-    var basicRate=isDividend?0.0875:0.20;
-    // Recompute per-year SRB for this-year slice
-    var srbUsed=0;
-    allIncome.forEach(function(i2){
-      if(i2.type==='Sale Proceeds')return;
-      if(taxYearOf(i2.date)!==curYear)return;
-      if(new Date(i2.date)>=dt)return;
-      srbUsed+=Math.min(Number(i2.amount),Math.max(0,500-srbUsed));
-    });
-    var srbLeft=Math.max(0,500-srbUsed);
+    var srbLeft=Math.max(0,500-thisYearSRBIn);
     var inBand=Math.min(amt,srbLeft);
     thisYearPoolIn+=inBand*(isDividend?0.0875:0.20)+(amt-inBand)*(isDividend?0.3935:0.45);
+    thisYearSRBIn+=inBand;
   });
 
+  // This-year pool-out: track band usage independently (oldest-first, same
+  // logic as the lifetime loop) so early distributions correctly get the band.
   var thisYearPoolOut=0;
+  var tyBandUsed=0;
   allDists.forEach(function(d){
     var dt=new Date(d.date);if(dt<yearStart||dt>=yearEnd)return;
-    var ty=taxYearOf(d.date);
-    var bandUsed=distSRBByYear[ty]||0;
-    var tc=calcDistTax(d,trust,bandUsed);
+    var tc=calcDistTax(d,trust,tyBandUsed);
     thisYearPoolOut+=tc.taxCredit||0;
+    if(tc.bandGrossUsed)tyBandUsed+=tc.bandGrossUsed;
   });
 
   return{
@@ -1362,23 +1357,25 @@ function modalBody(){
     h+='<div class="g2"><div class="fg"><label class="label">Amount (\u00A3)</label><input class="input" type="number" step="0.01" id="m-amt" value="'+(d.amount||"")+'"></div><div class="fg"><label class="label">Type</label><select class="sel" id="m-dtype">'+opts(DTP,d.distType||"Income - Non-Savings")+'</select></div></div>';
     h+='<div class="g3"><div class="fg"><label class="label">Date</label><input class="input" type="date" id="m-date" value="'+(d.date||tdy())+'"></div><div class="fg"><label class="label">Method</label><select class="sel" id="m-meth">'+opts(ME,d.method||"Bank Transfer")+'</select></div><div class="fg"><label class="label">Approved By</label><input class="input" id="m-appr" value="'+esc(d.approvedBy||"")+'"></div></div>';
     h+='<div class="fg"><label class="label">Reason</label><input class="input" id="m-rsn" value="'+esc(d.reason||"")+'"></div>';
-    // Pool warning for income distributions on discretionary/mixed trusts
-    var distType=d.distType||"Income - Non-Savings";
-    if(distType.indexOf("Income")===0&&t){
-      var pool2=calcTaxPool(t);
-      if(pool2){
-        var amt2=Number(d.amount||0);
-        // Estimate the credit this distribution would carry
-        var tc2=calcDistTax({amount:amt2,distType:distType},t,0);
-        var creditEst=tc2.taxCredit||0;
-        var balAfter=pool2.balance-creditEst;
-        if(balAfter<0){
-          h+='<div class="warn" style="margin-top:0"><div class="wt">\u26A0 Pool warning</div><div class="wb">This distribution would require a tax credit of approximately '+fm(creditEst)+', but the estimated pool balance is only '+fm(pool2.balance)+'. Issuing this R185 credit without sufficient pool would leave the trustees personally liable to HMRC for the shortfall of approximately '+fm(Math.abs(balAfter))+'. Consider reviewing with your accountant before proceeding. ITA 2007 s.496\u2013497.</div></div>';
-        } else if(balAfter<200){
-          h+='<div class="info"><div class="info-t">Pool nearly exhausted</div><div class="info-b">After this distribution approximately '+fm(balAfter)+' would remain in the pool. Check the pool position in the Tax Centre before making further income distributions this year.</div></div>';
+    // Pool warning for income distributions — wrapped in try-catch so any
+    // calculation error fails silently rather than freezing the render.
+    try{
+      var distType=d.distType||"Income - Non-Savings";
+      if(distType.indexOf("Income")===0&&t){
+        var pool2=calcTaxPool(t);
+        if(pool2){
+          var amt2=Number(d.amount||0);
+          var tc2=calcDistTax({amount:amt2,distType:distType},t,0);
+          var creditEst=tc2.taxCredit||0;
+          var balAfter=pool2.balance-creditEst;
+          if(amt2>0&&balAfter<0){
+            h+='<div class="warn" style="margin-top:0"><div class="wt">\u26A0 Pool warning</div><div class="wb">This distribution would require a tax credit of approximately '+fm(creditEst)+', but the estimated pool balance is only '+fm(pool2.balance)+'. Issuing this R185 credit without sufficient pool would leave the trustees personally liable to HMRC for the shortfall of approximately '+fm(Math.abs(balAfter))+'. Consider reviewing with your accountant before proceeding. ITA 2007 s.496\u2013497.</div></div>';
+          } else if(amt2>0&&balAfter<200){
+            h+='<div class="info"><div class="info-t">Pool nearly exhausted</div><div class="info-b">After this distribution approximately '+fm(balAfter)+' would remain in the pool. Check the pool position in the Tax Centre before making further income distributions this year.</div></div>';
+          }
         }
       }
-    }
+    }catch(e){console.warn('Pool warning calc error:',e);}
     h+='<div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-primary" onclick="saveDist()">Save</button>';
     if(d.id)h+='<button class="btn btn-danger" onclick="delItem(\'distribution\',\''+esc(d.id)+'\')">Delete</button>';
     h+='</div>';
